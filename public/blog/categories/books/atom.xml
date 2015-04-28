@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Books | RANDOM ramblings]]></title>
+  <link href="http://www.systemerror.co.za/blog/categories/books/atom.xml" rel="self"/>
+  <link href="http://www.systemerror.co.za/"/>
+  <updated>2015-04-28T20:35:23+00:00</updated>
+  <id>http://www.systemerror.co.za/</id>
+  <author>
+    <name><![CDATA[jayendren]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The Anything Store]]></title>
+    <link href="http://www.systemerror.co.za/blog/2015/04/28/the-anything-store/"/>
+    <updated>2015-04-28T18:45:00+00:00</updated>
+    <id>http://www.systemerror.co.za/blog/2015/04/28/the-anything-store</id>
+    <content type="html"><![CDATA[<p>{% img center http://ecx.images-amazon.com/images/I/51N7s0z8kXL.<em>AC_SX75_CR,0,0,75,75</em>.jpg %}
+{% blockquote thanks @tgenov, http://www.amazon.com/The-Everything-Store-Bezos-Amazon/dp/0316219266#reader_B00DJ3ITKS %}
+{% endblockquote %}</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,544 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>FreeBSD EZJAILS - RANDOM ramblings</title>
+  <meta name="author" content="jayendren">
+
+  
+  <meta name="description" content="FreeBSD Forums, forums.freebsd.org/threads/&hellip;
+July 26, 2014 update: different configuration for new pkg tool Following scenario is presented: &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  
+  <link rel="canonical" href="http://www.systemerror.co.za/blog/2015/04/26/freebsd-ezjails">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="" rel="alternate" title="RANDOM ramblings" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.useso.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.useso.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <div id="sidebar_control"></div>
+  <div id="sidebar">
+    <div class="logo">
+      systemERROR
+    </div>
+    <div class="content hide">
+      <section role="navigation">
+        <header role="banner"><hgroup>
+  <h1><a href="/">RANDOM ramblings</a></h1>
+  
+</hgroup>
+
+</header>
+        
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.systemerror.co.za" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+
+<ul class="main-navigation">
+  <li><a href="/">home</a></li>
+</ul>
+
+
+      </section>
+      
+        <section>
+  <h2>recent</h2>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/04/28/the-anything-store/">The Anything Store</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/27/freebsd-nginx_passenger/">FreeBSD Nginx+passenger</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/26/freebsd-ezjails/">FreeBSD EZJAILS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/21/puppet-usergroup-foreman/">Puppet User Group Johannesburg - Foreman</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/16/ekto_scaper/">Ruby ektoplazm.com Scraper</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h2>github</h2>
+  
+  <a href="https://github.com/jayendren">@jayendren</a>
+  
+  <ul id="gh_repos">
+  </ul>
+</section>
+
+
+
+
+
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="content">
+      <article class="hentry" role="article">
+  
+  
+    <header>
+      <div class="back"><a href="/" onclick="history.go(-1);return false;">← Back</a></div>
+      <h1 class="entry-title">FreeBSD EZJAILS</h1>
+    </header>
+  
+  <div class="entry-content"><p><img class="center" src="https://forums.freebsd.org/styles/freebsd/xenforo/freebsd_logo.png" /></p>
+
+<blockquote><p></p><footer><strong>FreeBSD Forums,</strong> <cite><a href="https://forums.freebsd.org/threads/howto-quick-setup-of-jail-on-zfs-using-ezjail-with-pf-nat.30063/">forums.freebsd.org/threads/&hellip;</a></cite></footer></blockquote>
+<p>July 26, 2014 update: different configuration for new pkg tool</p>
+
+<p>Following scenario is presented:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">               /----------- our host --------------\
+</span><span class="line">--{ internet } --- [ 192.0.2.1 ] ---jail--- [ 10.6.6.6 ]
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>where:</p>
+
+<p>em0 is an egress interface (internet facing) 
+lo666 is a custom loopback interface (host only)</p>
+
+<p>192.0.2.1 is a public IP address on em0
+10.6.6.6 is a jail IP address on lo666</p>
+
+<p>Goal is to create a jail where simple WWW service is running.</p>
+
+<p>Prerequisites:</p>
+
+<p>Installed sysutils/ezjail either from ports or from pre-built repository
+ZFS pool where jail dataset will be created; pool zpool is used here</p>
+
+<p>The /etc/rc.conf
+Enable PF, ZFS, ezjail and IP forwarding. Create and configure lo666 interface. Lines in question from /etc/rc.conf:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">cloned_interfaces="lo666"
+</span><span class="line">ifconfig_lo666_alias0="inet 10.6.6.6 netmask 255.255.255.255"
+</span><span class="line">
+</span><span class="line">gateway_enable="YES"
+</span><span class="line">
+</span><span class="line">pf_enable="YES"
+</span><span class="line">ezjail_enable="YES"
+</span><span class="line">zfs_enable="YES"
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Bring the interface up. In 9.0-RELEASE it&#8217;s enough to do:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># ifconfig lo666 create 
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>This creates the interface and assigns the alias from /etc/rc.conf. In case IP address is not up, bring it up manually:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># ifconfig lo666 alias 10.6.6.6 netmask 255.255.255.255 up</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Enable IP forwarding: 
+# sysctl net.inet.ip.forwarding=1</p>
+
+<p>Setup PF
+Only the NAT part of the PF is shown here, configuration of PF is not subject of this howto. 
+/etc/pf.conf:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">ext_if="em0"
+</span><span class="line">jail_if="lo666"
+</span><span class="line">
+</span><span class="line">IP_PUB="192.0.2.1"
+</span><span class="line">IP_JAIL_WWW="10.6.6.6"
+</span><span class="line">
+</span><span class="line">NET_JAIL="10.6.6.0/24"
+</span><span class="line">
+</span><span class="line">PORT_WWW="{80,443}"
+</span><span class="line">
+</span><span class="line">scrub in all
+</span><span class="line">
+</span><span class="line"># nat all jail traffic
+</span><span class="line">nat pass on $ext_if from $NET_JAIL to any -&gt; $IP_PUB
+</span><span class="line">
+</span><span class="line"># WWW
+</span><span class="line">rdr pass on $ext_if proto tcp from any to $IP_PUB port $PORT_WWW -&gt; $IP_JAIL_WWW
+</span><span class="line">
+</span><span class="line"># demo only, passing all traffic
+</span><span class="line">pass out
+</span><span class="line">pass in
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Check /etc/pf.conf for any mistakes:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># pfctl -nf /etc/pf.conf</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>If no error is shown, start the firewall.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># /etc/rc.d/pf start
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>Verify the firewall is enabled, check the NAT rules (ALTQ warnings can be safely ignored).</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">
+</span><span class="line"># pfctl -e
+</span><span class="line">pfctl: pf already enabled
+</span><span class="line">
+</span><span class="line">
+</span><span class="line"># pfctl -sn
+</span><span class="line">nat pass on em0 inet from 10.6.6.0/24 to any -&gt; 192.0.2.1
+</span><span class="line">rdr pass on em0 inet proto tcp from any to 192.0.2.1 port = http -&gt; 10.6.6.6
+</span><span class="line">rdr pass on em0 inet proto tcp from any to 192.0.2.1 port = https -&gt; 10.6.6.6</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Configure ezjail
+By default all jails are stored under /usr/jails directory. However I&#8217;ll use /local/jails in my setup.</p>
+
+<p>First create a ZFS dataset:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># zfs create -o mountpoint=/local/jails zpool/jails
+</span><span class="line"># chmod 700 /local/jails &amp;&amp; chown root:wheel /local/jails</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Main ezjail configuration is stored under /usr/local/etc/ezjail.conf. Uncomment and set at least these parameters:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">ezjail_jaildir=/local/jails
+</span><span class="line">ezjail_ftphost=ftp.sk.freebsd.org
+</span><span class="line">ezjail_use_zfs="YES"
+</span><span class="line">ezjail_jailzfs="zpool/jails"</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Use the ftp host closest to you. 
+There are several options how to install the base. Here I&#8217;ll just fetch the base from FTP, see the ezjail-admin(8) for details.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># ezjail-admin install</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Minimum userland - basejail - has been fetched. You can see it on separate dataset:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># zfs list
+</span><span class="line">zpool                  333M  1.63G    31K  none
+</span><span class="line">zpool/jails            332M  1.63G    47K  /local/jails
+</span><span class="line">zpool/jails/basejail   330M  1.63G   330M  /local/jails/basejail
+</span><span class="line">zpool/jails/newjail   1.70M  1.63G  1.70M  /local/jails/newjail</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>I plan to create more than one jail, I don&#8217;t want to set all system settings manually for each and every one of them. There&#8217;s where jail flavor comes in place.
+happycamper.local is my domain, I&#8217;ll use the name happycamper for a flavor.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># mkdir -p /local/jails/flavours/happycamper/etc/rc.d
+</span><span class="line"># cd /local/jails/flavours/happycamper/etc
+</span><span class="line"># vi rc.conf
+</span><span class="line">sshd_enable="YES"
+</span><span class="line">syslogd_flags="-ss"
+</span><span class="line">
+</span><span class="line"># cp -p /etc/resolv.conf .
+</span><span class="line"># cp -p /local/jails/flavours/example/etc/rc.d/ezjail.flavour.example rc.d/ezjail.flavour.happycamper</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Flavors are stored under $jailroot/flavours directory ($jailroot == /local/jails). I&#8217;ve created rc.conf and resolv.conf files - these will be copied to new jail with happycamper flavor.</p>
+
+<p>For the demonstration I want to create custom group, user and install screen package. This is done upon first jail startup by ezjail.flavour script.</p>
+
+<p>In vi editor I have replaced all &#8220;example&#8221; words by &#8220;happycamper&#8221;. All examples are shown there, easy to understand. In FreeBSD 10 there&#8217;s a new package management. There are no more pkg_* commands.</p>
+
+<p>Prior to FreeBSD 10 you can use the following flavor config:</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">pw group add users
+</span><span class="line">echo -n '$1$p75bbfK.$Kz3dwkoVlgZrfLZdAXQt91' |\
+</span><span class="line">pw user add martin -g users -G wheel -s /bin/csh -d /home/martin -m -H 0
+</span><span class="line">
+</span><span class="line">chown -R martin:users /home/martin
+</span><span class="line">
+</span><span class="line">pkg_add -r screen</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>If you are running FreeBSD 10 and later:</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">pw group add users
+</span><span class="line">echo -n '$1$p75bbfK.$Kz3dwkoVlgZrfLZdAXQt91' |\
+</span><span class="line">pw user add martin -g users -G wheel -s /bin/csh -d /home/martin -m -H 0
+</span><span class="line">
+</span><span class="line">chown -R martin:users /home/martin
+</span><span class="line"># don't ask - just do
+</span><span class="line">export ASSUME_ALWAYS_YES=YES
+</span><span class="line">pkg bootstrap
+</span><span class="line">pkg install screen</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Now I&#8217;m finally ready to create new jail with a flavor.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># ezjail-admin create -f happycamper -c zfs www 10.6.6.6
+</span><span class="line">ZFS: create the jail filesystem
+</span><span class="line">/local/jails/www/.
+</span><span class="line">/local/jails/www/./etc
+</span><span class="line">/local/jails/www/./etc/rc.d
+</span><span class="line">/local/jails/www/./etc/rc.d/ezjail.flavour.happycamper
+</span><span class="line">/local/jails/www/./etc/rc.conf
+</span><span class="line">/local/jails/www/./etc/resolv.conf
+</span><span class="line">5 blocks
+</span><span class="line">
+</span><span class="line">
+</span><span class="line">Starting the jail:
+</span><span class="line">
+</span><span class="line"># /usr/local/etc/rc.d/ezjail start www
+</span><span class="line">Configuring jails:.
+</span><span class="line">Starting jails: www.</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>It might take a second or two as the flavor script is executed upon first start; it does remove itself afterward. To check the jail status:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># jls
+</span><span class="line">   JID  IP Address      Hostname                      Path
+</span><span class="line">     2  10.6.6.6        www                           /local/jails/www
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>To access the jail ezjail-admin command can be used:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># ezjail-admin console www</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Now the apache can be installed and configured, jail itself is ready.</p>
+</div>
+  <footer>
+    <div class="articlemeta">
+      <span class="hide">
+        
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/general/'>general</a>
+  
+</span>
+
+ @
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-04-26T18:45:00+00:00" pubdate data-updated="true"></time>
+      </span>
+      <span class="plus">
+        
+          <a href="#">+</a>
+        
+      </span>
+    </div>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.systemerror.co.za/blog/2015/04/26/freebsd-ezjails/" data-via="jayendren" data-counturl="http://www.systemerror.co.za/blog/2015/04/26/freebsd-ezjails/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <div class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/04/21/puppet-usergroup-foreman/" title="Previous Post: Puppet User Group Johannesburg - Foreman">&laquo; Puppet User Group Johannesburg - Foreman</a>
+      
+    </div>
+  </footer>
+
+
+</article>
+
+
+    </div>
+    <footer role="contentinfo"><div class="content">
+  <p>
+    Copyright &copy; 2015 jayendren
+  </p>
+</div>
+
+<center>
+  <b> powered by: </b>
+  <img src="http://www.hardkernel.com/main/html/img/common/logo.png" alt="Odroid" style="width:80px;height:80">
+  <img src="https://d11xdyzr0div58.cloudfront.net/static/archnavbar/archlogo.4fefb38dc270.png" alt="ArchLinux" style="width:80px;height:80">
+  <img src="http://nginx.org/nginx.png" alt="NGINX" style="width:80px;height:80">
+  <img src="http://octopress.org/images/logo.png?1420306322" alt="Octopress" style="width:80px;height:80">
+  <img src="https://d3oypxn00j2a10.cloudfront.net/0.17.3/images/pages/brand_guidelines/small_v-dark.png" alt="Docker" style="width:80px;height:80">
+</center>
+</footer>
+    
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+  </div>
+  <script src="/javascripts/modernizr-2.0.js"></script>
+<script src="//ajax.useso.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+<script src="/javascripts/libs/respond.js" type="text/javascript"></script>
+<script src="/javascripts/octopress.js" type="text/javascript"></script>
+
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    if (!window.jXHR){
+      var jxhr = document.createElement('script');
+      jxhr.type = 'text/javascript';
+      jxhr.src = '/javascripts/libs/jXHR.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jxhr, s);
+    }
+
+    github.showRepos({
+      user: 'jayendren',
+      count: 0,
+      skip_forks: true,
+      target: '#gh_repos'
+    });
+  });
+  </script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var userAgent = navigator.userAgent.toLowerCase();
+  var isiPhone = (userAgent.indexOf('iphone') != -1 || userAgent.indexOf('ipod') != -1) ? true : false;
+  var isAndroid = (userAgent.indexOf('android') != -1) ? true : false;
+  clickEvent = (isiPhone || isAndroid) ? 'touchstart' : 'click';
+  $('#sidebar').on(clickEvent, function() {
+    $(this).toggleClass('open');
+  });
+  $('.articlemeta').on(clickEvent, function() {
+    toggleDisqus();
+    $(this).toggleClass('open');
+  });
+});
+</script>
+
+</body>
+</html>

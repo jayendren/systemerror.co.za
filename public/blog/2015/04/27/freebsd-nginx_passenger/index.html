@@ -1,0 +1,345 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>FreeBSD Nginx+passenger - RANDOM ramblings</title>
+  <meta name="author" content="jayendren">
+
+  
+  <meta name="description" content="passenger installation, gist.githubusercontent.com/raw/&hellip;
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+#!/ &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  
+  <link rel="canonical" href="http://www.systemerror.co.za/blog/2015/04/27/freebsd-nginx_passenger">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="" rel="alternate" title="RANDOM ramblings" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.useso.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.useso.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <div id="sidebar_control"></div>
+  <div id="sidebar">
+    <div class="logo">
+      systemERROR
+    </div>
+    <div class="content hide">
+      <section role="navigation">
+        <header role="banner"><hgroup>
+  <h1><a href="/">RANDOM ramblings</a></h1>
+  
+</hgroup>
+
+</header>
+        
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.systemerror.co.za" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+
+<ul class="main-navigation">
+  <li><a href="/">home</a></li>
+</ul>
+
+
+      </section>
+      
+        <section>
+  <h2>recent</h2>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/04/28/the-anything-store/">The Anything Store</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/27/freebsd-nginx_passenger/">FreeBSD Nginx+passenger</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/26/freebsd-ezjails/">FreeBSD EZJAILS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/21/puppet-usergroup-foreman/">Puppet User Group Johannesburg - Foreman</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/16/ekto_scaper/">Ruby ektoplazm.com Scraper</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h2>github</h2>
+  
+  <a href="https://github.com/jayendren">@jayendren</a>
+  
+  <ul id="gh_repos">
+  </ul>
+</section>
+
+
+
+
+
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="content">
+      <article class="hentry" role="article">
+  
+  
+    <header>
+      <div class="back"><a href="/" onclick="history.go(-1);return false;">← Back</a></div>
+      <h1 class="entry-title">FreeBSD Nginx+passenger</h1>
+    </header>
+  
+  <div class="entry-content"><p><img class="center" src="https://forums.freebsd.org/styles/freebsd/xenforo/freebsd_logo.png" /></p>
+
+<blockquote><p></p><footer><strong>passenger installation,</strong> <cite><a href="https://gist.githubusercontent.com/geoffgarside/855302/raw/cc24215b0a2601911b84f48092627b9976fc3332/install-passenger-nginx.sh">gist.githubusercontent.com/raw/&hellip;</a></cite></footer></blockquote>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">#!/bin/sh
+</span><span class="line">#
+</span><span class="line"># Pre-requisites:
+</span><span class="line">#   FreeBSD
+</span><span class="line">#   Passenger installed as a gem
+</span><span class="line"># Optional:
+</span><span class="line">#   Ruby Enterprise Edition instead of lang/ruby18
+</span><span class="line">#
+</span><span class="line">
+</span><span class="line">make -C /usr/ports/www/nginx clean patch apply-slist install-rc-script
+</span><span class="line">source_dir=`ls -d /usr/ports/www/nginx/work/nginx-*`	# should be only one
+</span><span class="line">
+</span><span class="line">passenger-install-nginx-module --prefix=/usr/local \
+</span><span class="line">	--nginx-source-dir="${source_dir}" \
+</span><span class="line">	--extra-configure-flags="--with-cc-opt=\"-I /usr/local/include\" \
+</span><span class="line">				--with-ld-opt=\"-L /usr/local/lib\" \
+</span><span class="line">				--conf-path=/usr/local/etc/nginx/nginx.conf \
+</span><span class="line">				--sbin-path=/usr/local/sbin/nginx \
+</span><span class="line">				--pid-path=/var/run/nginx.pid \
+</span><span class="line">				--error-log-path=/var/log/nginx-error.log \
+</span><span class="line">				--user=www --group=www \
+</span><span class="line">				--http-client-body-temp-path=/var/tmp/nginx/client_body_temp \
+</span><span class="line">				--http-proxy-temp-path=/var/tmp/nginx/proxy_temp \
+</span><span class="line">				--http-fastcgi-temp-path=/var/tmp/nginx/fastcgi_temp \
+</span><span class="line">				--http-log-path=/var/log/nginx-access.log \
+</span><span class="line">				--with-http_addition_module \
+</span><span class="line">				--with-http_gzip_static_module \
+</span><span class="line">				--with-http_ssl_module \
+</span><span class="line">				--with-http_stub_status_module \
+</span><span class="line">				--with-ipv6"</span></code></pre></td></tr></table></div></figure></notextile></div>
+</div>
+  <footer>
+    <div class="articlemeta">
+      <span class="hide">
+        
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/general/'>general</a>
+  
+</span>
+
+ @
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-04-27T18:45:00+00:00" pubdate data-updated="true"></time>
+      </span>
+      <span class="plus">
+        
+          <a href="#">+</a>
+        
+      </span>
+    </div>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.systemerror.co.za/blog/2015/04/27/freebsd-nginx_passenger/" data-via="jayendren" data-counturl="http://www.systemerror.co.za/blog/2015/04/27/freebsd-nginx_passenger/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <div class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/04/26/freebsd-ezjails/" title="Previous Post: FreeBSD EZJAILS">&laquo; FreeBSD EZJAILS</a>
+      
+    </div>
+  </footer>
+
+
+</article>
+
+
+    </div>
+    <footer role="contentinfo"><div class="content">
+  <p>
+    Copyright &copy; 2015 jayendren
+  </p>
+</div>
+
+<center>
+  <b> powered by: </b>
+  <img src="http://www.hardkernel.com/main/html/img/common/logo.png" alt="Odroid" style="width:80px;height:80">
+  <img src="https://d11xdyzr0div58.cloudfront.net/static/archnavbar/archlogo.4fefb38dc270.png" alt="ArchLinux" style="width:80px;height:80">
+  <img src="http://nginx.org/nginx.png" alt="NGINX" style="width:80px;height:80">
+  <img src="http://octopress.org/images/logo.png?1420306322" alt="Octopress" style="width:80px;height:80">
+  <img src="https://d3oypxn00j2a10.cloudfront.net/0.17.3/images/pages/brand_guidelines/small_v-dark.png" alt="Docker" style="width:80px;height:80">
+</center>
+</footer>
+    
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+  </div>
+  <script src="/javascripts/modernizr-2.0.js"></script>
+<script src="//ajax.useso.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+<script src="/javascripts/libs/respond.js" type="text/javascript"></script>
+<script src="/javascripts/octopress.js" type="text/javascript"></script>
+
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    if (!window.jXHR){
+      var jxhr = document.createElement('script');
+      jxhr.type = 'text/javascript';
+      jxhr.src = '/javascripts/libs/jXHR.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jxhr, s);
+    }
+
+    github.showRepos({
+      user: 'jayendren',
+      count: 0,
+      skip_forks: true,
+      target: '#gh_repos'
+    });
+  });
+  </script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var userAgent = navigator.userAgent.toLowerCase();
+  var isiPhone = (userAgent.indexOf('iphone') != -1 || userAgent.indexOf('ipod') != -1) ? true : false;
+  var isAndroid = (userAgent.indexOf('android') != -1) ? true : false;
+  clickEvent = (isiPhone || isAndroid) ? 'touchstart' : 'click';
+  $('#sidebar').on(clickEvent, function() {
+    $(this).toggleClass('open');
+  });
+  $('.articlemeta').on(clickEvent, function() {
+    toggleDisqus();
+    $(this).toggleClass('open');
+  });
+});
+</script>
+
+</body>
+</html>

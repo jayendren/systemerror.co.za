@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[RANDOM ramblings]]></title>
+  <link href="http://www.systemerror.co.za/atom.xml" rel="self"/>
+  <link href="http://www.systemerror.co.za/"/>
+  <updated>2015-04-28T20:35:23+00:00</updated>
+  <id>http://www.systemerror.co.za/</id>
+  <author>
+    <name><![CDATA[jayendren]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The Anything Store]]></title>
+    <link href="http://www.systemerror.co.za/blog/2015/04/28/the-anything-store/"/>
+    <updated>2015-04-28T18:45:00+00:00</updated>
+    <id>http://www.systemerror.co.za/blog/2015/04/28/the-anything-store</id>
+    <content type="html"><![CDATA[<p><img class="center" src="http://ecx.images-amazon.com/images/I/51N7s0z8kXL._AC_SX75_CR,0,0,75,75_.jpg" /></p>
+<blockquote><p></p><footer><strong>thanks @tgenov,</strong> <cite><a href="http://www.amazon.com/The-Everything-Store-Bezos-Amazon/dp/0316219266#reader_B00DJ3ITKS">www.amazon.com/dp/&hellip;</a></cite></footer></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[FreeBSD Nginx+passenger]]></title>
+    <link href="http://www.systemerror.co.za/blog/2015/04/27/freebsd-nginx_passenger/"/>
+    <updated>2015-04-27T18:45:00+00:00</updated>
+    <id>http://www.systemerror.co.za/blog/2015/04/27/freebsd-nginx_passenger</id>
+    <content type="html"><![CDATA[<p><img class="center" src="https://forums.freebsd.org/styles/freebsd/xenforo/freebsd_logo.png" /></p>
+
+<blockquote><p></p><footer><strong>passenger installation,</strong> <cite><a href="https://gist.githubusercontent.com/geoffgarside/855302/raw/cc24215b0a2601911b84f48092627b9976fc3332/install-passenger-nginx.sh">gist.githubusercontent.com/raw/&hellip;</a></cite></footer></blockquote>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">#!/bin/sh
+</span><span class="line">#
+</span><span class="line"># Pre-requisites:
+</span><span class="line">#   FreeBSD
+</span><span class="line">#   Passenger installed as a gem
+</span><span class="line"># Optional:
+</span><span class="line">#   Ruby Enterprise Edition instead of lang/ruby18
+</span><span class="line">#
+</span><span class="line">
+</span><span class="line">make -C /usr/ports/www/nginx clean patch apply-slist install-rc-script
+</span><span class="line">source_dir=`ls -d /usr/ports/www/nginx/work/nginx-*`	# should be only one
+</span><span class="line">
+</span><span class="line">passenger-install-nginx-module --prefix=/usr/local \
+</span><span class="line">	--nginx-source-dir="${source_dir}" \
+</span><span class="line">	--extra-configure-flags="--with-cc-opt=\"-I /usr/local/include\" \
+</span><span class="line">				--with-ld-opt=\"-L /usr/local/lib\" \
+</span><span class="line">				--conf-path=/usr/local/etc/nginx/nginx.conf \
+</span><span class="line">				--sbin-path=/usr/local/sbin/nginx \
+</span><span class="line">				--pid-path=/var/run/nginx.pid \
+</span><span class="line">				--error-log-path=/var/log/nginx-error.log \
+</span><span class="line">				--user=www --group=www \
+</span><span class="line">				--http-client-body-temp-path=/var/tmp/nginx/client_body_temp \
+</span><span class="line">				--http-proxy-temp-path=/var/tmp/nginx/proxy_temp \
+</span><span class="line">				--http-fastcgi-temp-path=/var/tmp/nginx/fastcgi_temp \
+</span><span class="line">				--http-log-path=/var/log/nginx-access.log \
+</span><span class="line">				--with-http_addition_module \
+</span><span class="line">				--with-http_gzip_static_module \
+</span><span class="line">				--with-http_ssl_module \
+</span><span class="line">				--with-http_stub_status_module \
+</span><span class="line">				--with-ipv6"</span></code></pre></td></tr></table></div></figure></notextile></div>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[FreeBSD EZJAILS]]></title>
+    <link href="http://www.systemerror.co.za/blog/2015/04/26/freebsd-ezjails/"/>
+    <updated>2015-04-26T18:45:00+00:00</updated>
+    <id>http://www.systemerror.co.za/blog/2015/04/26/freebsd-ezjails</id>
+    <content type="html"><![CDATA[<p><img class="center" src="https://forums.freebsd.org/styles/freebsd/xenforo/freebsd_logo.png" /></p>
+
+<blockquote><p></p><footer><strong>FreeBSD Forums,</strong> <cite><a href="https://forums.freebsd.org/threads/howto-quick-setup-of-jail-on-zfs-using-ezjail-with-pf-nat.30063/">forums.freebsd.org/threads/&hellip;</a></cite></footer></blockquote>
+<p>July 26, 2014 update: different configuration for new pkg tool</p>
+
+<p>Following scenario is presented:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">               /----------- our host --------------\
+</span><span class="line">--{ internet } --- [ 192.0.2.1 ] ---jail--- [ 10.6.6.6 ]
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>where:</p>
+
+<p>em0 is an egress interface (internet facing) 
+lo666 is a custom loopback interface (host only)</p>
+
+<p>192.0.2.1 is a public IP address on em0
+10.6.6.6 is a jail IP address on lo666</p>
+
+<p>Goal is to create a jail where simple WWW service is running.</p>
+
+<p>Prerequisites:</p>
+
+<p>Installed sysutils/ezjail either from ports or from pre-built repository
+ZFS pool where jail dataset will be created; pool zpool is used here</p>
+
+<p>The /etc/rc.conf
+Enable PF, ZFS, ezjail and IP forwarding. Create and configure lo666 interface. Lines in question from /etc/rc.conf:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">cloned_interfaces="lo666"
+</span><span class="line">ifconfig_lo666_alias0="inet 10.6.6.6 netmask 255.255.255.255"
+</span><span class="line">
+</span><span class="line">gateway_enable="YES"
+</span><span class="line">
+</span><span class="line">pf_enable="YES"
+</span><span class="line">ezjail_enable="YES"
+</span><span class="line">zfs_enable="YES"
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Bring the interface up. In 9.0-RELEASE it&#8217;s enough to do:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># ifconfig lo666 create 
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>This creates the interface and assigns the alias from /etc/rc.conf. In case IP address is not up, bring it up manually:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># ifconfig lo666 alias 10.6.6.6 netmask 255.255.255.255 up</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Enable IP forwarding: 
+# sysctl net.inet.ip.forwarding=1</p>
+
+<p>Setup PF
+Only the NAT part of the PF is shown here, configuration of PF is not subject of this howto. 
+/etc/pf.conf:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">ext_if="em0"
+</span><span class="line">jail_if="lo666"
+</span><span class="line">
+</span><span class="line">IP_PUB="192.0.2.1"
+</span><span class="line">IP_JAIL_WWW="10.6.6.6"
+</span><span class="line">
+</span><span class="line">NET_JAIL="10.6.6.0/24"
+</span><span class="line">
+</span><span class="line">PORT_WWW="{80,443}"
+</span><span class="line">
+</span><span class="line">scrub in all
+</span><span class="line">
+</span><span class="line"># nat all jail traffic
+</span><span class="line">nat pass on $ext_if from $NET_JAIL to any -&gt; $IP_PUB
+</span><span class="line">
+</span><span class="line"># WWW
+</span><span class="line">rdr pass on $ext_if proto tcp from any to $IP_PUB port $PORT_WWW -&gt; $IP_JAIL_WWW
+</span><span class="line">
+</span><span class="line"># demo only, passing all traffic
+</span><span class="line">pass out
+</span><span class="line">pass in
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Check /etc/pf.conf for any mistakes:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># pfctl -nf /etc/pf.conf</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>If no error is shown, start the firewall.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># /etc/rc.d/pf start
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>Verify the firewall is enabled, check the NAT rules (ALTQ warnings can be safely ignored).</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">
+</span><span class="line"># pfctl -e
+</span><span class="line">pfctl: pf already enabled
+</span><span class="line">
+</span><span class="line">
+</span><span class="line"># pfctl -sn
+</span><span class="line">nat pass on em0 inet from 10.6.6.0/24 to any -&gt; 192.0.2.1
+</span><span class="line">rdr pass on em0 inet proto tcp from any to 192.0.2.1 port = http -&gt; 10.6.6.6
+</span><span class="line">rdr pass on em0 inet proto tcp from any to 192.0.2.1 port = https -&gt; 10.6.6.6</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Configure ezjail
+By default all jails are stored under /usr/jails directory. However I&#8217;ll use /local/jails in my setup.</p>
+
+<p>First create a ZFS dataset:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># zfs create -o mountpoint=/local/jails zpool/jails
+</span><span class="line"># chmod 700 /local/jails &amp;&amp; chown root:wheel /local/jails</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Main ezjail configuration is stored under /usr/local/etc/ezjail.conf. Uncomment and set at least these parameters:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">ezjail_jaildir=/local/jails
+</span><span class="line">ezjail_ftphost=ftp.sk.freebsd.org
+</span><span class="line">ezjail_use_zfs="YES"
+</span><span class="line">ezjail_jailzfs="zpool/jails"</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Use the ftp host closest to you. 
+There are several options how to install the base. Here I&#8217;ll just fetch the base from FTP, see the ezjail-admin(8) for details.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># ezjail-admin install</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Minimum userland - basejail - has been fetched. You can see it on separate dataset:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># zfs list
+</span><span class="line">zpool                  333M  1.63G    31K  none
+</span><span class="line">zpool/jails            332M  1.63G    47K  /local/jails
+</span><span class="line">zpool/jails/basejail   330M  1.63G   330M  /local/jails/basejail
+</span><span class="line">zpool/jails/newjail   1.70M  1.63G  1.70M  /local/jails/newjail</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>I plan to create more than one jail, I don&#8217;t want to set all system settings manually for each and every one of them. There&#8217;s where jail flavor comes in place.
+happycamper.local is my domain, I&#8217;ll use the name happycamper for a flavor.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># mkdir -p /local/jails/flavours/happycamper/etc/rc.d
+</span><span class="line"># cd /local/jails/flavours/happycamper/etc
+</span><span class="line"># vi rc.conf
+</span><span class="line">sshd_enable="YES"
+</span><span class="line">syslogd_flags="-ss"
+</span><span class="line">
+</span><span class="line"># cp -p /etc/resolv.conf .
+</span><span class="line"># cp -p /local/jails/flavours/example/etc/rc.d/ezjail.flavour.example rc.d/ezjail.flavour.happycamper</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Flavors are stored under $jailroot/flavours directory ($jailroot == /local/jails). I&#8217;ve created rc.conf and resolv.conf files - these will be copied to new jail with happycamper flavor.</p>
+
+<p>For the demonstration I want to create custom group, user and install screen package. This is done upon first jail startup by ezjail.flavour script.</p>
+
+<p>In vi editor I have replaced all &#8220;example&#8221; words by &#8220;happycamper&#8221;. All examples are shown there, easy to understand. In FreeBSD 10 there&#8217;s a new package management. There are no more pkg_* commands.</p>
+
+<p>Prior to FreeBSD 10 you can use the following flavor config:</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">pw group add users
+</span><span class="line">echo -n '$1$p75bbfK.$Kz3dwkoVlgZrfLZdAXQt91' |\
+</span><span class="line">pw user add martin -g users -G wheel -s /bin/csh -d /home/martin -m -H 0
+</span><span class="line">
+</span><span class="line">chown -R martin:users /home/martin
+</span><span class="line">
+</span><span class="line">pkg_add -r screen</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>If you are running FreeBSD 10 and later:</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">pw group add users
+</span><span class="line">echo -n '$1$p75bbfK.$Kz3dwkoVlgZrfLZdAXQt91' |\
+</span><span class="line">pw user add martin -g users -G wheel -s /bin/csh -d /home/martin -m -H 0
+</span><span class="line">
+</span><span class="line">chown -R martin:users /home/martin
+</span><span class="line"># don't ask - just do
+</span><span class="line">export ASSUME_ALWAYS_YES=YES
+</span><span class="line">pkg bootstrap
+</span><span class="line">pkg install screen</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Now I&#8217;m finally ready to create new jail with a flavor.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># ezjail-admin create -f happycamper -c zfs www 10.6.6.6
+</span><span class="line">ZFS: create the jail filesystem
+</span><span class="line">/local/jails/www/.
+</span><span class="line">/local/jails/www/./etc
+</span><span class="line">/local/jails/www/./etc/rc.d
+</span><span class="line">/local/jails/www/./etc/rc.d/ezjail.flavour.happycamper
+</span><span class="line">/local/jails/www/./etc/rc.conf
+</span><span class="line">/local/jails/www/./etc/resolv.conf
+</span><span class="line">5 blocks
+</span><span class="line">
+</span><span class="line">
+</span><span class="line">Starting the jail:
+</span><span class="line">
+</span><span class="line"># /usr/local/etc/rc.d/ezjail start www
+</span><span class="line">Configuring jails:.
+</span><span class="line">Starting jails: www.</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>It might take a second or two as the flavor script is executed upon first start; it does remove itself afterward. To check the jail status:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># jls
+</span><span class="line">   JID  IP Address      Hostname                      Path
+</span><span class="line">     2  10.6.6.6        www                           /local/jails/www
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>To access the jail ezjail-admin command can be used:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># ezjail-admin console www</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Now the apache can be installed and configured, jail itself is ready.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Puppet User Group Johannesburg - Foreman]]></title>
+    <link href="http://www.systemerror.co.za/blog/2015/04/21/puppet-usergroup-foreman/"/>
+    <updated>2015-04-21T18:45:00+00:00</updated>
+    <id>http://www.systemerror.co.za/blog/2015/04/21/puppet-usergroup-foreman</id>
+    <content type="html"><![CDATA[<p><img class="center" src="http://photos3.meetupstatic.com/photos/event/c/1/7/a/global_434209530.jpeg" /></p>
+
+<blockquote><p>Puppet MeetUp! Foreman demo and overview<br />FNB Randburg - 2015-04-21 18:45<br />Hi All</p><p>Please join us for our second meetup.</p><p>Jayendren is going to give a talk on Foreman.</p><p>The second talk is not finalized so please give us your input on the mailing list. With the imminent release of puppet 4, perhaps a puppet 4 introduction/changes.</p><footer><strong>Merrit,</strong> <cite><a href="http://www.meetup.com/Johannesburg-Puppet-User-Group/events/221520257/">www.meetup.com/events/221520257/&hellip;</a></cite></footer></blockquote>
+<p>Presentation:</p>
+<div class="embed-video-container"><iframe src="//www.youtube.com/embed/ig3A8LcbHlc" allowfullscreen=""></iframe></div>
+<p>Demos:</p>
+<div class="embed-video-container"><iframe src="//www.youtube.com/embed/5rXAEI7Pvq8" allowfullscreen=""></iframe></div>
+<div class="embed-video-container"><iframe src="//www.youtube.com/embed/bJWerFLB9L0" allowfullscreen=""></iframe></div>
+<div class="embed-video-container"><iframe src="//www.youtube.com/embed/NdMVl24qwF4" allowfullscreen=""></iframe></div>
+<div class="embed-video-container"><iframe src="//www.youtube.com/embed/bnxkpWKXYfg" allowfullscreen=""></iframe></div>
+<div class="embed-video-container"><iframe src="//www.youtube.com/embed/fj7Yh6MFrgw" allowfullscreen=""></iframe></div>
+<div class="embed-video-container"><iframe src="//www.youtube.com/embed/JZZXgClWc3A" allowfullscreen=""></iframe></div>
+<div class="embed-video-container"><iframe src="//www.youtube.com/embed/As-m1fHf-MQ" allowfullscreen=""></iframe></div>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ruby ektoplazm.com Scraper]]></title>
+    <link href="http://www.systemerror.co.za/blog/2015/03/16/ekto_scaper/"/>
+    <updated>2015-03-16T15:20:00+00:00</updated>
+    <id>http://www.systemerror.co.za/blog/2015/03/16/ekto_scaper</id>
+    <content type="html"><![CDATA[<p><img class="center" src="http://www.ektoplazm.com/i/g-header.jpg" /></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">Requires:
+</span><span class="line"> rubygems:
+</span><span class="line">  nokogiri, open-uri, colorize
+</span><span class="line">  download manager:
+</span><span class="line">   axel or wget (update @dlmgmr variable with path)
+</span><span class="line">
+</span><span class="line">Sample usage:
+</span><span class="line">  Interactive:
+</span><span class="line">   ./ekto_scaper
+</span><span class="line">
+</span><span class="line">CLI:
+</span><span class="line">   ./ekto_scaper --url http://www.ektoplazm.com/style/progressive --rating 96
+</span><span class="line">
+</span><span class="line">Sample output:
+</span><span class="line">
+</span><span class="line">./ekto.rb --url http://www.ektoplazm.com/style/progressive --rating 96                                                                                             130 ↵
+</span><span class="line">DBG: URL: http://www.ektoplazm.com/style/progressive - RATING: 96
+</span><span class="line">
+</span><span class="line"> loading...please wait.
+</span><span class="line"> ...
+</span><span class="line">
+</span><span class="line"> === Progressive Releases at Ektoplazm ===
+</span><span class="line">
+</span><span class="line"> Release:                                                          Rating:              Status:                   Completed:
+</span><span class="line">
+</span><span class="line"> DJ Basilisk – Replicant Redux                                     93                   skipping                  98.076923
+</span><span class="line"> 
+</span><span class="line"> DJ Basilisk – Nocturnal Wanderlust                                96                   starting                  100.000000
+</span><span class="line"> Initializing download: http://www.ektoplazm.com/files/DJ%20Basilisk%20-%20Nocturnal%20Wanderlust.mp3
+</span><span class="line"> File size: 191565824 bytes
+</span><span class="line"> Opening output file DJ Basilisk - Nocturnal Wanderlust.mp3.0
+</span><span class="line"> Starting download
+</span><span class="line">
+</span><span class="line"> Connection 1 finished                                                          ]
+</span><span class="line"> Connection 3 finished                                                          ]
+</span><span class="line"> Connection 2 finished                                                          ]
+</span><span class="line"> Connection 0 finished                                                          ]
+</span><span class="line">
+</span><span class="line"> Downloaded 182.7 megabytes in 5:01 seconds. (621.36 KB/s)
+</span><span class="line">Author: Jayendren Maduray &lt;jayendren@gmail.com&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class="highlighter-coderay"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre><a href="#n1" name="n1">1</a>
+<a href="#n2" name="n2">2</a>
+<a href="#n3" name="n3">3</a>
+<a href="#n4" name="n4">4</a>
+<a href="#n5" name="n5">5</a>
+<a href="#n6" name="n6">6</a>
+<a href="#n7" name="n7">7</a>
+<a href="#n8" name="n8">8</a>
+<a href="#n9" name="n9">9</a>
+<strong><a href="#n10" name="n10">10</a></strong>
+<a href="#n11" name="n11">11</a>
+<a href="#n12" name="n12">12</a>
+<a href="#n13" name="n13">13</a>
+<a href="#n14" name="n14">14</a>
+<a href="#n15" name="n15">15</a>
+<a href="#n16" name="n16">16</a>
+<a href="#n17" name="n17">17</a>
+<a href="#n18" name="n18">18</a>
+<a href="#n19" name="n19">19</a>
+<strong><a href="#n20" name="n20">20</a></strong>
+<a href="#n21" name="n21">21</a>
+<a href="#n22" name="n22">22</a>
+<a href="#n23" name="n23">23</a>
+<a href="#n24" name="n24">24</a>
+<a href="#n25" name="n25">25</a>
+<a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
+<a href="#n31" name="n31">31</a>
+<a href="#n32" name="n32">32</a>
+<a href="#n33" name="n33">33</a>
+<a href="#n34" name="n34">34</a>
+<a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
+<a href="#n42" name="n42">42</a>
+<a href="#n43" name="n43">43</a>
+<a href="#n44" name="n44">44</a>
+<a href="#n45" name="n45">45</a>
+<a href="#n46" name="n46">46</a>
+<a href="#n47" name="n47">47</a>
+<a href="#n48" name="n48">48</a>
+<a href="#n49" name="n49">49</a>
+<strong><a href="#n50" name="n50">50</a></strong>
+<a href="#n51" name="n51">51</a>
+<a href="#n52" name="n52">52</a>
+<a href="#n53" name="n53">53</a>
+<a href="#n54" name="n54">54</a>
+<a href="#n55" name="n55">55</a>
+<a href="#n56" name="n56">56</a>
+<a href="#n57" name="n57">57</a>
+<a href="#n58" name="n58">58</a>
+<a href="#n59" name="n59">59</a>
+<strong><a href="#n60" name="n60">60</a></strong>
+<a href="#n61" name="n61">61</a>
+<a href="#n62" name="n62">62</a>
+<a href="#n63" name="n63">63</a>
+<a href="#n64" name="n64">64</a>
+<a href="#n65" name="n65">65</a>
+<a href="#n66" name="n66">66</a>
+<a href="#n67" name="n67">67</a>
+<a href="#n68" name="n68">68</a>
+<a href="#n69" name="n69">69</a>
+<strong><a href="#n70" name="n70">70</a></strong>
+<a href="#n71" name="n71">71</a>
+<a href="#n72" name="n72">72</a>
+<a href="#n73" name="n73">73</a>
+<a href="#n74" name="n74">74</a>
+<a href="#n75" name="n75">75</a>
+<a href="#n76" name="n76">76</a>
+<a href="#n77" name="n77">77</a>
+<a href="#n78" name="n78">78</a>
+<a href="#n79" name="n79">79</a>
+<strong><a href="#n80" name="n80">80</a></strong>
+<a href="#n81" name="n81">81</a>
+<a href="#n82" name="n82">82</a>
+<a href="#n83" name="n83">83</a>
+<a href="#n84" name="n84">84</a>
+<a href="#n85" name="n85">85</a>
+<a href="#n86" name="n86">86</a>
+<a href="#n87" name="n87">87</a>
+<a href="#n88" name="n88">88</a>
+<a href="#n89" name="n89">89</a>
+<strong><a href="#n90" name="n90">90</a></strong>
+<a href="#n91" name="n91">91</a>
+<a href="#n92" name="n92">92</a>
+<a href="#n93" name="n93">93</a>
+<a href="#n94" name="n94">94</a>
+<a href="#n95" name="n95">95</a>
+<a href="#n96" name="n96">96</a>
+<a href="#n97" name="n97">97</a>
+<a href="#n98" name="n98">98</a>
+<a href="#n99" name="n99">99</a>
+<strong><a href="#n100" name="n100">100</a></strong>
+<a href="#n101" name="n101">101</a>
+<a href="#n102" name="n102">102</a>
+<a href="#n103" name="n103">103</a>
+<a href="#n104" name="n104">104</a>
+<a href="#n105" name="n105">105</a>
+<a href="#n106" name="n106">106</a>
+<a href="#n107" name="n107">107</a>
+<a href="#n108" name="n108">108</a>
+<a href="#n109" name="n109">109</a>
+<strong><a href="#n110" name="n110">110</a></strong>
+<a href="#n111" name="n111">111</a>
+<a href="#n112" name="n112">112</a>
+<a href="#n113" name="n113">113</a>
+<a href="#n114" name="n114">114</a>
+<a href="#n115" name="n115">115</a>
+<a href="#n116" name="n116">116</a>
+<a href="#n117" name="n117">117</a>
+<a href="#n118" name="n118">118</a>
+<a href="#n119" name="n119">119</a>
+<strong><a href="#n120" name="n120">120</a></strong>
+<a href="#n121" name="n121">121</a>
+<a href="#n122" name="n122">122</a>
+<a href="#n123" name="n123">123</a>
+<a href="#n124" name="n124">124</a>
+<a href="#n125" name="n125">125</a>
+<a href="#n126" name="n126">126</a>
+<a href="#n127" name="n127">127</a>
+</pre></td>
+  <td class="code"><pre>require <span class="string"><span class="delimiter">'</span><span class="content">rubygems</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">nokogiri</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">open-uri</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">colorize</span><span class="delimiter">'</span></span>
+
+<span class="comment"># GLOBAL VARIABLES</span>
+<span class="instance-variable">@rating</span> = <span class="integer">95</span>
+<span class="instance-variable">@dlmgmr</span> = <span class="string"><span class="delimiter">&quot;</span><span class="content">axel -a</span><span class="delimiter">&quot;</span></span>
+
+<span class="keyword">def</span> <span class="function">ekto_input</span>
+
+  <span class="keyword">if</span> (<span class="predefined-constant">ARGV</span>[<span class="integer">0</span>].to_s.match(<span class="regexp"><span class="delimiter">/</span><span class="content">^</span><span class="char">\-</span><span class="char">\-</span><span class="content">help$</span><span class="delimiter">/</span></span>))
+
+    cmd = <span class="global-variable">$0</span>
+
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">About:</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.blue
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">Ruby (nokogiri) scraper for www.ektoplazm.com </span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.green
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">Use case: </span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.green
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">1. Scan all pages on http://www.ektoplazm.com/style/progressive</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.green
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">2. Find and download all MP3 packs with rating &gt; 95%</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.green
+
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">Usage:</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.blue
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">Interactive:     </span><span class="inline"><span class="inline-delimiter">#{</span>cmd<span class="inline-delimiter">}</span></span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.green
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">CLI        :     </span><span class="inline"><span class="inline-delimiter">#{</span>cmd<span class="inline-delimiter">}</span></span><span class="content"> --url 'http://www.ektoplazm.com/style/progressive' --rating '95'</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.green
+    exit <span class="integer">0</span>
+
+  <span class="keyword">elsif</span> (<span class="predefined-constant">ARGV</span>[<span class="integer">0</span>].to_s.match(<span class="regexp"><span class="delimiter">/</span><span class="content">^</span><span class="char">\-</span><span class="char">\-</span><span class="content">url$</span><span class="delimiter">/</span></span>))
+
+    <span class="keyword">unless</span> (<span class="predefined-constant">ARGV</span>[<span class="integer">1</span>].to_s.empty?) <span class="keyword">or</span> ! (<span class="predefined-constant">ARGV</span>[<span class="integer">1</span>].to_s.match(<span class="regexp"><span class="delimiter">/</span><span class="content">^http</span><span class="char">\:</span><span class="char">\/</span><span class="char">\/</span><span class="content">www</span><span class="char">\.</span><span class="content">ektoplazm</span><span class="char">\.</span><span class="content">com</span><span class="char">\/</span><span class="content">style</span><span class="char">\/</span><span class="delimiter">/</span></span>))
+      <span class="instance-variable">@ekto_url</span> = <span class="predefined-constant">ARGV</span>[<span class="integer">1</span>]
+    <span class="keyword">else</span> 
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">invalid url !</span><span class="delimiter">&quot;</span></span>.red; exit <span class="integer">1</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">if</span> (<span class="predefined-constant">ARGV</span>[<span class="integer">2</span>].to_s.match(<span class="regexp"><span class="delimiter">/</span><span class="content">^</span><span class="char">\-</span><span class="char">\-</span><span class="content">rating$</span><span class="delimiter">/</span></span>))
+
+      <span class="keyword">unless</span> (<span class="predefined-constant">ARGV</span>[<span class="integer">3</span>].to_s.empty?) <span class="keyword">or</span> ! (<span class="predefined-constant">ARGV</span>[<span class="integer">3</span>].to_i &lt; <span class="integer">100</span>)   
+        <span class="instance-variable">@ekto_rating</span> = <span class="predefined-constant">ARGV</span>[<span class="integer">3</span>]   
+      <span class="keyword">else</span> 
+        puts <span class="string"><span class="delimiter">&quot;</span><span class="content">rating cannot be &gt; 100 !</span><span class="delimiter">&quot;</span></span>.red; exit <span class="integer">1</span>
+      <span class="keyword">end</span>        
+
+    <span class="keyword">end</span>
+
+  <span class="keyword">else</span>
+
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">Interactive mode started: </span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.cyan
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">Type ektoplazm URL &gt; </span><span class="delimiter">&quot;</span></span>.green
+
+    <span class="instance-variable">@ekto_url</span> = gets.strip.to_s
+    <span class="keyword">unless</span> ! <span class="instance-variable">@ekto_url</span>.match(<span class="regexp"><span class="delimiter">/</span><span class="content">^http</span><span class="char">\:</span><span class="char">\/</span><span class="char">\/</span><span class="content">www</span><span class="char">\.</span><span class="content">ektoplazm</span><span class="char">\.</span><span class="content">com</span><span class="char">\/</span><span class="content">style</span><span class="char">\/</span><span class="delimiter">/</span></span>)
+      printf <span class="string"><span class="delimiter">&quot;</span><span class="content">Type the rating: &gt; </span><span class="delimiter">&quot;</span></span>.green
+      <span class="instance-variable">@ekto_rating</span>  = gets.strip.to_s
+
+      <span class="keyword">unless</span> ! (<span class="instance-variable">@ekto_rating</span>.to_i &lt; <span class="integer">100</span>)
+        printf <span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+      <span class="keyword">else</span> 
+        puts <span class="string"><span class="delimiter">&quot;</span><span class="content">rating cannot be &gt; 100 !</span><span class="delimiter">&quot;</span></span>.red; exit <span class="integer">1</span>
+      <span class="keyword">end</span>
+
+    <span class="keyword">else</span> 
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">invalid url !</span><span class="delimiter">&quot;</span></span>.red; exit <span class="integer">1</span>
+    <span class="keyword">end</span> 
+
+  <span class="keyword">end</span>  
+  puts <span class="string"><span class="delimiter">&quot;</span><span class="content">DBG: URL: </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@ekto_url</span><span class="inline-delimiter">}</span></span><span class="content"> - RATING: </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@ekto_rating</span><span class="inline-delimiter">}</span></span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.green
+  puts <span class="string"><span class="delimiter">&quot;</span><span class="content">loading...please wait.</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.green
+
+<span class="keyword">end</span> <span class="comment">#def</span>
+
+<span class="keyword">def</span> <span class="function">ekto_scrape</span>(ekto_url,ekto_rating)
+  url     = ekto_url  
+  <span class="instance-variable">@rating</span> = ekto_rating.to_i
+  <span class="instance-variable">@doc</span>    = <span class="constant">Nokogiri</span>::HTML(open(url))
+  pgs     = <span class="instance-variable">@doc</span>.css(<span class="string"><span class="delimiter">&quot;</span><span class="content">.navigation</span><span class="delimiter">&quot;</span></span>).css(<span class="string"><span class="delimiter">&quot;</span><span class="content">.pages</span><span class="delimiter">&quot;</span></span>).text.split(<span class="regexp"><span class="delimiter">/</span><span class="char">\s</span><span class="delimiter">/</span></span>)[<span class="integer">-1</span>].to_i
+  post    = <span class="instance-variable">@doc</span>.css(<span class="string"><span class="delimiter">&quot;</span><span class="content">.post</span><span class="delimiter">&quot;</span></span>)
+
+  printf <span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="content">===</span><span class="char">\s</span><span class="content">%s===</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.blue % [ <span class="instance-variable">@doc</span>.at_css(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>).text.split(<span class="regexp"><span class="delimiter">/</span><span class="char">\-</span><span class="delimiter">/</span></span>)[<span class="integer">0</span>], pgs - pgs + <span class="integer">1</span> ]
+  printf <span class="string"><span class="delimiter">&quot;</span><span class="content">%-65s %-20s %-25s %-2s</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.cyan % [ <span class="string"><span class="delimiter">'</span><span class="content">Release:</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Rating:</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Status:</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Completed:</span><span class="delimiter">'</span></span>]
+
+  <span class="comment">#page 1</span>
+  post.each {|d|
+    title = d.css(<span class="string"><span class="delimiter">&quot;</span><span class="content">h1</span><span class="delimiter">&quot;</span></span>).css(<span class="string"><span class="delimiter">&quot;</span><span class="content">a</span><span class="delimiter">&quot;</span></span>).text
+    score = d.css(<span class="string"><span class="delimiter">&quot;</span><span class="content">strong</span><span class="delimiter">&quot;</span></span>).to_s.split(<span class="regexp"><span class="delimiter">/</span><span class="char">\&gt;</span><span class="content">|</span><span class="char">\%</span><span class="delimiter">/</span></span>)[<span class="integer">-4</span>].to_i
+    dll   = d.css(<span class="string"><span class="delimiter">&quot;</span><span class="content">.dll</span><span class="delimiter">&quot;</span></span>).css(<span class="string"><span class="delimiter">&quot;</span><span class="content">a</span><span class="delimiter">&quot;</span></span>).to_s.split(<span class="regexp"><span class="delimiter">/</span><span class="char">\&quot;</span><span class="delimiter">/</span></span>)[<span class="integer">1</span>]
+
+    <span class="keyword">unless</span> score &lt; <span class="instance-variable">@rating</span>
+      printf <span class="string"><span class="delimiter">&quot;</span><span class="content">%-65s %-20s %-25s %-1f</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.cyan % [ title, score, <span class="string"><span class="delimiter">'</span><span class="content">starting</span><span class="delimiter">'</span></span>, ((<span class="integer">1</span> / pgs.to_f) * <span class="integer">100</span>).to_f ]
+      system(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@dlmgmr</span><span class="inline-delimiter">}</span></span><span class="content"> </span><span class="inline"><span class="inline-delimiter">#{</span>dll<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+      puts 
+    <span class="keyword">else</span> 
+      printf <span class="string"><span class="delimiter">&quot;</span><span class="content">%-65s %-20s %-25s %-1f</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.red % [ title, score, <span class="string"><span class="delimiter">'</span><span class="content">skipping</span><span class="delimiter">'</span></span>, ((<span class="integer">1</span> / pgs.to_f) * <span class="integer">100</span>).to_f ]
+    <span class="keyword">end</span> 
+    puts
+  }
+
+  <span class="comment">#remaining pages</span>
+  <span class="keyword">for</span> pages <span class="keyword">in</span> <span class="integer">2</span>..pgs
+
+    url = <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span>ekto_url<span class="inline-delimiter">}</span></span><span class="content">/page/</span><span class="inline"><span class="inline-delimiter">#{</span>pages<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+    <span class="instance-variable">@doc</span> = <span class="constant">Nokogiri</span>::HTML(open(url))
+
+    post = <span class="instance-variable">@doc</span>.css(<span class="string"><span class="delimiter">&quot;</span><span class="content">.post</span><span class="delimiter">&quot;</span></span>)
+    post.each {|d|
+      title = d.css(<span class="string"><span class="delimiter">&quot;</span><span class="content">h1</span><span class="delimiter">&quot;</span></span>).css(<span class="string"><span class="delimiter">&quot;</span><span class="content">a</span><span class="delimiter">&quot;</span></span>).text
+      score = d.css(<span class="string"><span class="delimiter">&quot;</span><span class="content">strong</span><span class="delimiter">&quot;</span></span>).to_s.split(<span class="regexp"><span class="delimiter">/</span><span class="char">\&gt;</span><span class="content">|</span><span class="char">\%</span><span class="delimiter">/</span></span>)[<span class="integer">-4</span>].to_i
+      dll   = d.css(<span class="string"><span class="delimiter">&quot;</span><span class="content">.dll</span><span class="delimiter">&quot;</span></span>).css(<span class="string"><span class="delimiter">&quot;</span><span class="content">a</span><span class="delimiter">&quot;</span></span>).to_s.split(<span class="regexp"><span class="delimiter">/</span><span class="char">\&quot;</span><span class="delimiter">/</span></span>)[<span class="integer">1</span>]
+
+      <span class="keyword">unless</span> score &lt; <span class="instance-variable">@rating</span>
+        printf <span class="string"><span class="delimiter">&quot;</span><span class="content">%-65s %-20s %-25s %-1f</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.cyan % [ title, score, <span class="string"><span class="delimiter">'</span><span class="content">starting</span><span class="delimiter">'</span></span>, ((pages.to_f / pgs.to_f) * <span class="integer">100</span>).to_f ]
+        system(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@dlmgmr</span><span class="inline-delimiter">}</span></span><span class="content"> </span><span class="inline"><span class="inline-delimiter">#{</span>dll<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+        puts 
+      <span class="keyword">else</span> 
+        printf <span class="string"><span class="delimiter">&quot;</span><span class="content">%-65s %-20s %-25s %-1f</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.red % [ title, score, <span class="string"><span class="delimiter">'</span><span class="content">skipping</span><span class="delimiter">'</span></span>, ((pages.to_f / pgs.to_f) * <span class="integer">100</span>).to_f ]
+      <span class="keyword">end</span> 
+      puts
+    }
+
+  <span class="keyword">end</span> <span class="comment">#for pages</span>
+
+<span class="keyword">end</span> <span class="comment">#def</span>
+
+<span class="comment">## MAIN ##</span>
+<span class="keyword">begin</span>
+  ekto_input
+  ekto_scrape(<span class="instance-variable">@ekto_url</span>,<span class="instance-variable">@ekto_rating</span>)
+<span class="keyword">end</span>
+</pre></td>
+</tr></table>
+</div>
+]]></content>
+  </entry>
+  
+</feed>

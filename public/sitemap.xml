@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://www.systemerror.co.za/blog/2015/04/28/the-anything-store/</loc>
+    <lastmod>2015-04-28T18:45:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.systemerror.co.za/blog/2015/04/27/freebsd-nginx_passenger/</loc>
+    <lastmod>2015-04-27T18:45:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.systemerror.co.za/blog/2015/04/26/freebsd-ezjails/</loc>
+    <lastmod>2015-04-26T18:45:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.systemerror.co.za/blog/2015/04/21/puppet-usergroup-foreman/</loc>
+    <lastmod>2015-04-21T18:45:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.systemerror.co.za/blog/2015/03/16/ekto_scaper/</loc>
+    <lastmod>2015-03-16T15:20:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.systemerror.co.za/archives/</loc>
+    <lastmod>2015-04-28T20:35:23+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.systemerror.co.za/</loc>
+    <lastmod>2015-04-28T20:35:23+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.systemerror.co.za/about/</loc>
+    <lastmod>2015-04-28T20:35:23+00:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.systemerror.co.za/blog/archives/</loc>
+    <lastmod>2015-04-28T20:35:23+00:00</lastmod>
+  </url>
+</urlset>

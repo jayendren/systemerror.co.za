@@ -1,0 +1,629 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Ruby ektoplazm.com Scraper - RANDOM ramblings</title>
+  <meta name="author" content="jayendren">
+
+  
+  <meta name="description" content="1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+Requires: rubygems: nokogiri, open- &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  
+  <link rel="canonical" href="http://www.systemerror.co.za/blog/2015/03/16/ekto_scaper">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="" rel="alternate" title="RANDOM ramblings" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.useso.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.useso.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <div id="sidebar_control"></div>
+  <div id="sidebar">
+    <div class="logo">
+      systemERROR
+    </div>
+    <div class="content hide">
+      <section role="navigation">
+        <header role="banner"><hgroup>
+  <h1><a href="/">RANDOM ramblings</a></h1>
+  
+</hgroup>
+
+</header>
+        
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.systemerror.co.za" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+
+<ul class="main-navigation">
+  <li><a href="/">home</a></li>
+</ul>
+
+
+      </section>
+      
+        <section>
+  <h2>recent</h2>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/04/28/the-anything-store/">The Anything Store</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/27/freebsd-nginx_passenger/">FreeBSD Nginx+passenger</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/26/freebsd-ezjails/">FreeBSD EZJAILS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/21/puppet-usergroup-foreman/">Puppet User Group Johannesburg - Foreman</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/16/ekto_scaper/">Ruby ektoplazm.com Scraper</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h2>github</h2>
+  
+  <a href="https://github.com/jayendren">@jayendren</a>
+  
+  <ul id="gh_repos">
+  </ul>
+</section>
+
+
+
+
+
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="content">
+      <article class="hentry" role="article">
+  
+  
+    <header>
+      <div class="back"><a href="/" onclick="history.go(-1);return false;">← Back</a></div>
+      <h1 class="entry-title">Ruby ektoplazm.com Scraper</h1>
+    </header>
+  
+  <div class="entry-content"><p><img class="center" src="http://www.ektoplazm.com/i/g-header.jpg" /></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">Requires:
+</span><span class="line"> rubygems:
+</span><span class="line">  nokogiri, open-uri, colorize
+</span><span class="line">  download manager:
+</span><span class="line">   axel or wget (update @dlmgmr variable with path)
+</span><span class="line">
+</span><span class="line">Sample usage:
+</span><span class="line">  Interactive:
+</span><span class="line">   ./ekto_scaper
+</span><span class="line">
+</span><span class="line">CLI:
+</span><span class="line">   ./ekto_scaper --url http://www.ektoplazm.com/style/progressive --rating 96
+</span><span class="line">
+</span><span class="line">Sample output:
+</span><span class="line">
+</span><span class="line">./ekto.rb --url http://www.ektoplazm.com/style/progressive --rating 96                                                                                             130 ↵
+</span><span class="line">DBG: URL: http://www.ektoplazm.com/style/progressive - RATING: 96
+</span><span class="line">
+</span><span class="line"> loading...please wait.
+</span><span class="line"> ...
+</span><span class="line">
+</span><span class="line"> === Progressive Releases at Ektoplazm ===
+</span><span class="line">
+</span><span class="line"> Release:                                                          Rating:              Status:                   Completed:
+</span><span class="line">
+</span><span class="line"> DJ Basilisk – Replicant Redux                                     93                   skipping                  98.076923
+</span><span class="line"> 
+</span><span class="line"> DJ Basilisk – Nocturnal Wanderlust                                96                   starting                  100.000000
+</span><span class="line"> Initializing download: http://www.ektoplazm.com/files/DJ%20Basilisk%20-%20Nocturnal%20Wanderlust.mp3
+</span><span class="line"> File size: 191565824 bytes
+</span><span class="line"> Opening output file DJ Basilisk - Nocturnal Wanderlust.mp3.0
+</span><span class="line"> Starting download
+</span><span class="line">
+</span><span class="line"> Connection 1 finished                                                          ]
+</span><span class="line"> Connection 3 finished                                                          ]
+</span><span class="line"> Connection 2 finished                                                          ]
+</span><span class="line"> Connection 0 finished                                                          ]
+</span><span class="line">
+</span><span class="line"> Downloaded 182.7 megabytes in 5:01 seconds. (621.36 KB/s)
+</span><span class="line">Author: Jayendren Maduray &lt;jayendren@gmail.com&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class="highlighter-coderay"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre><a href="#n1" name="n1">1</a>
+<a href="#n2" name="n2">2</a>
+<a href="#n3" name="n3">3</a>
+<a href="#n4" name="n4">4</a>
+<a href="#n5" name="n5">5</a>
+<a href="#n6" name="n6">6</a>
+<a href="#n7" name="n7">7</a>
+<a href="#n8" name="n8">8</a>
+<a href="#n9" name="n9">9</a>
+<strong><a href="#n10" name="n10">10</a></strong>
+<a href="#n11" name="n11">11</a>
+<a href="#n12" name="n12">12</a>
+<a href="#n13" name="n13">13</a>
+<a href="#n14" name="n14">14</a>
+<a href="#n15" name="n15">15</a>
+<a href="#n16" name="n16">16</a>
+<a href="#n17" name="n17">17</a>
+<a href="#n18" name="n18">18</a>
+<a href="#n19" name="n19">19</a>
+<strong><a href="#n20" name="n20">20</a></strong>
+<a href="#n21" name="n21">21</a>
+<a href="#n22" name="n22">22</a>
+<a href="#n23" name="n23">23</a>
+<a href="#n24" name="n24">24</a>
+<a href="#n25" name="n25">25</a>
+<a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
+<a href="#n31" name="n31">31</a>
+<a href="#n32" name="n32">32</a>
+<a href="#n33" name="n33">33</a>
+<a href="#n34" name="n34">34</a>
+<a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
+<a href="#n42" name="n42">42</a>
+<a href="#n43" name="n43">43</a>
+<a href="#n44" name="n44">44</a>
+<a href="#n45" name="n45">45</a>
+<a href="#n46" name="n46">46</a>
+<a href="#n47" name="n47">47</a>
+<a href="#n48" name="n48">48</a>
+<a href="#n49" name="n49">49</a>
+<strong><a href="#n50" name="n50">50</a></strong>
+<a href="#n51" name="n51">51</a>
+<a href="#n52" name="n52">52</a>
+<a href="#n53" name="n53">53</a>
+<a href="#n54" name="n54">54</a>
+<a href="#n55" name="n55">55</a>
+<a href="#n56" name="n56">56</a>
+<a href="#n57" name="n57">57</a>
+<a href="#n58" name="n58">58</a>
+<a href="#n59" name="n59">59</a>
+<strong><a href="#n60" name="n60">60</a></strong>
+<a href="#n61" name="n61">61</a>
+<a href="#n62" name="n62">62</a>
+<a href="#n63" name="n63">63</a>
+<a href="#n64" name="n64">64</a>
+<a href="#n65" name="n65">65</a>
+<a href="#n66" name="n66">66</a>
+<a href="#n67" name="n67">67</a>
+<a href="#n68" name="n68">68</a>
+<a href="#n69" name="n69">69</a>
+<strong><a href="#n70" name="n70">70</a></strong>
+<a href="#n71" name="n71">71</a>
+<a href="#n72" name="n72">72</a>
+<a href="#n73" name="n73">73</a>
+<a href="#n74" name="n74">74</a>
+<a href="#n75" name="n75">75</a>
+<a href="#n76" name="n76">76</a>
+<a href="#n77" name="n77">77</a>
+<a href="#n78" name="n78">78</a>
+<a href="#n79" name="n79">79</a>
+<strong><a href="#n80" name="n80">80</a></strong>
+<a href="#n81" name="n81">81</a>
+<a href="#n82" name="n82">82</a>
+<a href="#n83" name="n83">83</a>
+<a href="#n84" name="n84">84</a>
+<a href="#n85" name="n85">85</a>
+<a href="#n86" name="n86">86</a>
+<a href="#n87" name="n87">87</a>
+<a href="#n88" name="n88">88</a>
+<a href="#n89" name="n89">89</a>
+<strong><a href="#n90" name="n90">90</a></strong>
+<a href="#n91" name="n91">91</a>
+<a href="#n92" name="n92">92</a>
+<a href="#n93" name="n93">93</a>
+<a href="#n94" name="n94">94</a>
+<a href="#n95" name="n95">95</a>
+<a href="#n96" name="n96">96</a>
+<a href="#n97" name="n97">97</a>
+<a href="#n98" name="n98">98</a>
+<a href="#n99" name="n99">99</a>
+<strong><a href="#n100" name="n100">100</a></strong>
+<a href="#n101" name="n101">101</a>
+<a href="#n102" name="n102">102</a>
+<a href="#n103" name="n103">103</a>
+<a href="#n104" name="n104">104</a>
+<a href="#n105" name="n105">105</a>
+<a href="#n106" name="n106">106</a>
+<a href="#n107" name="n107">107</a>
+<a href="#n108" name="n108">108</a>
+<a href="#n109" name="n109">109</a>
+<strong><a href="#n110" name="n110">110</a></strong>
+<a href="#n111" name="n111">111</a>
+<a href="#n112" name="n112">112</a>
+<a href="#n113" name="n113">113</a>
+<a href="#n114" name="n114">114</a>
+<a href="#n115" name="n115">115</a>
+<a href="#n116" name="n116">116</a>
+<a href="#n117" name="n117">117</a>
+<a href="#n118" name="n118">118</a>
+<a href="#n119" name="n119">119</a>
+<strong><a href="#n120" name="n120">120</a></strong>
+<a href="#n121" name="n121">121</a>
+<a href="#n122" name="n122">122</a>
+<a href="#n123" name="n123">123</a>
+<a href="#n124" name="n124">124</a>
+<a href="#n125" name="n125">125</a>
+<a href="#n126" name="n126">126</a>
+<a href="#n127" name="n127">127</a>
+</pre></td>
+  <td class="code"><pre>require <span class="string"><span class="delimiter">'</span><span class="content">rubygems</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">nokogiri</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">open-uri</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">colorize</span><span class="delimiter">'</span></span>
+
+<span class="comment"># GLOBAL VARIABLES</span>
+<span class="instance-variable">@rating</span> = <span class="integer">95</span>
+<span class="instance-variable">@dlmgmr</span> = <span class="string"><span class="delimiter">&quot;</span><span class="content">axel -a</span><span class="delimiter">&quot;</span></span>
+
+<span class="keyword">def</span> <span class="function">ekto_input</span>
+
+  <span class="keyword">if</span> (<span class="predefined-constant">ARGV</span>[<span class="integer">0</span>].to_s.match(<span class="regexp"><span class="delimiter">/</span><span class="content">^</span><span class="char">\-</span><span class="char">\-</span><span class="content">help$</span><span class="delimiter">/</span></span>))
+
+    cmd = <span class="global-variable">$0</span>
+
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">About:</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.blue
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">Ruby (nokogiri) scraper for www.ektoplazm.com </span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.green
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">Use case: </span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.green
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">1. Scan all pages on http://www.ektoplazm.com/style/progressive</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.green
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">2. Find and download all MP3 packs with rating &gt; 95%</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.green
+
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">Usage:</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.blue
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">Interactive:     </span><span class="inline"><span class="inline-delimiter">#{</span>cmd<span class="inline-delimiter">}</span></span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.green
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">CLI        :     </span><span class="inline"><span class="inline-delimiter">#{</span>cmd<span class="inline-delimiter">}</span></span><span class="content"> --url 'http://www.ektoplazm.com/style/progressive' --rating '95'</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.green
+    exit <span class="integer">0</span>
+
+  <span class="keyword">elsif</span> (<span class="predefined-constant">ARGV</span>[<span class="integer">0</span>].to_s.match(<span class="regexp"><span class="delimiter">/</span><span class="content">^</span><span class="char">\-</span><span class="char">\-</span><span class="content">url$</span><span class="delimiter">/</span></span>))
+
+    <span class="keyword">unless</span> (<span class="predefined-constant">ARGV</span>[<span class="integer">1</span>].to_s.empty?) <span class="keyword">or</span> ! (<span class="predefined-constant">ARGV</span>[<span class="integer">1</span>].to_s.match(<span class="regexp"><span class="delimiter">/</span><span class="content">^http</span><span class="char">\:</span><span class="char">\/</span><span class="char">\/</span><span class="content">www</span><span class="char">\.</span><span class="content">ektoplazm</span><span class="char">\.</span><span class="content">com</span><span class="char">\/</span><span class="content">style</span><span class="char">\/</span><span class="delimiter">/</span></span>))
+      <span class="instance-variable">@ekto_url</span> = <span class="predefined-constant">ARGV</span>[<span class="integer">1</span>]
+    <span class="keyword">else</span> 
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">invalid url !</span><span class="delimiter">&quot;</span></span>.red; exit <span class="integer">1</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">if</span> (<span class="predefined-constant">ARGV</span>[<span class="integer">2</span>].to_s.match(<span class="regexp"><span class="delimiter">/</span><span class="content">^</span><span class="char">\-</span><span class="char">\-</span><span class="content">rating$</span><span class="delimiter">/</span></span>))
+
+      <span class="keyword">unless</span> (<span class="predefined-constant">ARGV</span>[<span class="integer">3</span>].to_s.empty?) <span class="keyword">or</span> ! (<span class="predefined-constant">ARGV</span>[<span class="integer">3</span>].to_i &lt; <span class="integer">100</span>)   
+        <span class="instance-variable">@ekto_rating</span> = <span class="predefined-constant">ARGV</span>[<span class="integer">3</span>]   
+      <span class="keyword">else</span> 
+        puts <span class="string"><span class="delimiter">&quot;</span><span class="content">rating cannot be &gt; 100 !</span><span class="delimiter">&quot;</span></span>.red; exit <span class="integer">1</span>
+      <span class="keyword">end</span>        
+
+    <span class="keyword">end</span>
+
+  <span class="keyword">else</span>
+
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">Interactive mode started: </span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.cyan
+    printf <span class="string"><span class="delimiter">&quot;</span><span class="content">Type ektoplazm URL &gt; </span><span class="delimiter">&quot;</span></span>.green
+
+    <span class="instance-variable">@ekto_url</span> = gets.strip.to_s
+    <span class="keyword">unless</span> ! <span class="instance-variable">@ekto_url</span>.match(<span class="regexp"><span class="delimiter">/</span><span class="content">^http</span><span class="char">\:</span><span class="char">\/</span><span class="char">\/</span><span class="content">www</span><span class="char">\.</span><span class="content">ektoplazm</span><span class="char">\.</span><span class="content">com</span><span class="char">\/</span><span class="content">style</span><span class="char">\/</span><span class="delimiter">/</span></span>)
+      printf <span class="string"><span class="delimiter">&quot;</span><span class="content">Type the rating: &gt; </span><span class="delimiter">&quot;</span></span>.green
+      <span class="instance-variable">@ekto_rating</span>  = gets.strip.to_s
+
+      <span class="keyword">unless</span> ! (<span class="instance-variable">@ekto_rating</span>.to_i &lt; <span class="integer">100</span>)
+        printf <span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+      <span class="keyword">else</span> 
+        puts <span class="string"><span class="delimiter">&quot;</span><span class="content">rating cannot be &gt; 100 !</span><span class="delimiter">&quot;</span></span>.red; exit <span class="integer">1</span>
+      <span class="keyword">end</span>
+
+    <span class="keyword">else</span> 
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="content">invalid url !</span><span class="delimiter">&quot;</span></span>.red; exit <span class="integer">1</span>
+    <span class="keyword">end</span> 
+
+  <span class="keyword">end</span>  
+  puts <span class="string"><span class="delimiter">&quot;</span><span class="content">DBG: URL: </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@ekto_url</span><span class="inline-delimiter">}</span></span><span class="content"> - RATING: </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@ekto_rating</span><span class="inline-delimiter">}</span></span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.green
+  puts <span class="string"><span class="delimiter">&quot;</span><span class="content">loading...please wait.</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.green
+
+<span class="keyword">end</span> <span class="comment">#def</span>
+
+<span class="keyword">def</span> <span class="function">ekto_scrape</span>(ekto_url,ekto_rating)
+  url     = ekto_url  
+  <span class="instance-variable">@rating</span> = ekto_rating.to_i
+  <span class="instance-variable">@doc</span>    = <span class="constant">Nokogiri</span>::HTML(open(url))
+  pgs     = <span class="instance-variable">@doc</span>.css(<span class="string"><span class="delimiter">&quot;</span><span class="content">.navigation</span><span class="delimiter">&quot;</span></span>).css(<span class="string"><span class="delimiter">&quot;</span><span class="content">.pages</span><span class="delimiter">&quot;</span></span>).text.split(<span class="regexp"><span class="delimiter">/</span><span class="char">\s</span><span class="delimiter">/</span></span>)[<span class="integer">-1</span>].to_i
+  post    = <span class="instance-variable">@doc</span>.css(<span class="string"><span class="delimiter">&quot;</span><span class="content">.post</span><span class="delimiter">&quot;</span></span>)
+
+  printf <span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="content">===</span><span class="char">\s</span><span class="content">%s===</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.blue % [ <span class="instance-variable">@doc</span>.at_css(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>).text.split(<span class="regexp"><span class="delimiter">/</span><span class="char">\-</span><span class="delimiter">/</span></span>)[<span class="integer">0</span>], pgs - pgs + <span class="integer">1</span> ]
+  printf <span class="string"><span class="delimiter">&quot;</span><span class="content">%-65s %-20s %-25s %-2s</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.cyan % [ <span class="string"><span class="delimiter">'</span><span class="content">Release:</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Rating:</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Status:</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Completed:</span><span class="delimiter">'</span></span>]
+
+  <span class="comment">#page 1</span>
+  post.each {|d|
+    title = d.css(<span class="string"><span class="delimiter">&quot;</span><span class="content">h1</span><span class="delimiter">&quot;</span></span>).css(<span class="string"><span class="delimiter">&quot;</span><span class="content">a</span><span class="delimiter">&quot;</span></span>).text
+    score = d.css(<span class="string"><span class="delimiter">&quot;</span><span class="content">strong</span><span class="delimiter">&quot;</span></span>).to_s.split(<span class="regexp"><span class="delimiter">/</span><span class="char">\&gt;</span><span class="content">|</span><span class="char">\%</span><span class="delimiter">/</span></span>)[<span class="integer">-4</span>].to_i
+    dll   = d.css(<span class="string"><span class="delimiter">&quot;</span><span class="content">.dll</span><span class="delimiter">&quot;</span></span>).css(<span class="string"><span class="delimiter">&quot;</span><span class="content">a</span><span class="delimiter">&quot;</span></span>).to_s.split(<span class="regexp"><span class="delimiter">/</span><span class="char">\&quot;</span><span class="delimiter">/</span></span>)[<span class="integer">1</span>]
+
+    <span class="keyword">unless</span> score &lt; <span class="instance-variable">@rating</span>
+      printf <span class="string"><span class="delimiter">&quot;</span><span class="content">%-65s %-20s %-25s %-1f</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.cyan % [ title, score, <span class="string"><span class="delimiter">'</span><span class="content">starting</span><span class="delimiter">'</span></span>, ((<span class="integer">1</span> / pgs.to_f) * <span class="integer">100</span>).to_f ]
+      system(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@dlmgmr</span><span class="inline-delimiter">}</span></span><span class="content"> </span><span class="inline"><span class="inline-delimiter">#{</span>dll<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+      puts 
+    <span class="keyword">else</span> 
+      printf <span class="string"><span class="delimiter">&quot;</span><span class="content">%-65s %-20s %-25s %-1f</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.red % [ title, score, <span class="string"><span class="delimiter">'</span><span class="content">skipping</span><span class="delimiter">'</span></span>, ((<span class="integer">1</span> / pgs.to_f) * <span class="integer">100</span>).to_f ]
+    <span class="keyword">end</span> 
+    puts
+  }
+
+  <span class="comment">#remaining pages</span>
+  <span class="keyword">for</span> pages <span class="keyword">in</span> <span class="integer">2</span>..pgs
+
+    url = <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span>ekto_url<span class="inline-delimiter">}</span></span><span class="content">/page/</span><span class="inline"><span class="inline-delimiter">#{</span>pages<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+    <span class="instance-variable">@doc</span> = <span class="constant">Nokogiri</span>::HTML(open(url))
+
+    post = <span class="instance-variable">@doc</span>.css(<span class="string"><span class="delimiter">&quot;</span><span class="content">.post</span><span class="delimiter">&quot;</span></span>)
+    post.each {|d|
+      title = d.css(<span class="string"><span class="delimiter">&quot;</span><span class="content">h1</span><span class="delimiter">&quot;</span></span>).css(<span class="string"><span class="delimiter">&quot;</span><span class="content">a</span><span class="delimiter">&quot;</span></span>).text
+      score = d.css(<span class="string"><span class="delimiter">&quot;</span><span class="content">strong</span><span class="delimiter">&quot;</span></span>).to_s.split(<span class="regexp"><span class="delimiter">/</span><span class="char">\&gt;</span><span class="content">|</span><span class="char">\%</span><span class="delimiter">/</span></span>)[<span class="integer">-4</span>].to_i
+      dll   = d.css(<span class="string"><span class="delimiter">&quot;</span><span class="content">.dll</span><span class="delimiter">&quot;</span></span>).css(<span class="string"><span class="delimiter">&quot;</span><span class="content">a</span><span class="delimiter">&quot;</span></span>).to_s.split(<span class="regexp"><span class="delimiter">/</span><span class="char">\&quot;</span><span class="delimiter">/</span></span>)[<span class="integer">1</span>]
+
+      <span class="keyword">unless</span> score &lt; <span class="instance-variable">@rating</span>
+        printf <span class="string"><span class="delimiter">&quot;</span><span class="content">%-65s %-20s %-25s %-1f</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.cyan % [ title, score, <span class="string"><span class="delimiter">'</span><span class="content">starting</span><span class="delimiter">'</span></span>, ((pages.to_f / pgs.to_f) * <span class="integer">100</span>).to_f ]
+        system(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@dlmgmr</span><span class="inline-delimiter">}</span></span><span class="content"> </span><span class="inline"><span class="inline-delimiter">#{</span>dll<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+        puts 
+      <span class="keyword">else</span> 
+        printf <span class="string"><span class="delimiter">&quot;</span><span class="content">%-65s %-20s %-25s %-1f</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>.red % [ title, score, <span class="string"><span class="delimiter">'</span><span class="content">skipping</span><span class="delimiter">'</span></span>, ((pages.to_f / pgs.to_f) * <span class="integer">100</span>).to_f ]
+      <span class="keyword">end</span> 
+      puts
+    }
+
+  <span class="keyword">end</span> <span class="comment">#for pages</span>
+
+<span class="keyword">end</span> <span class="comment">#def</span>
+
+<span class="comment">## MAIN ##</span>
+<span class="keyword">begin</span>
+  ekto_input
+  ekto_scrape(<span class="instance-variable">@ekto_url</span>,<span class="instance-variable">@ekto_rating</span>)
+<span class="keyword">end</span>
+</pre></td>
+</tr></table>
+</div>
+</div>
+  <footer>
+    <div class="articlemeta">
+      <span class="hide">
+        
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/general/'>general</a>
+  
+</span>
+
+ @
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-16T15:20:00+00:00" pubdate data-updated="true"></time>
+      </span>
+      <span class="plus">
+        
+          <a href="#">+</a>
+        
+      </span>
+    </div>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.systemerror.co.za/blog/2015/03/16/ekto_scaper/" data-via="jayendren" data-counturl="http://www.systemerror.co.za/blog/2015/03/16/ekto_scaper/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <div class="meta">
+      
+    </div>
+  </footer>
+
+
+</article>
+
+
+    </div>
+    <footer role="contentinfo"><div class="content">
+  <p>
+    Copyright &copy; 2015 jayendren
+  </p>
+</div>
+
+<center>
+  <b> powered by: </b>
+  <img src="http://www.hardkernel.com/main/html/img/common/logo.png" alt="Odroid" style="width:80px;height:80">
+  <img src="https://d11xdyzr0div58.cloudfront.net/static/archnavbar/archlogo.4fefb38dc270.png" alt="ArchLinux" style="width:80px;height:80">
+  <img src="http://nginx.org/nginx.png" alt="NGINX" style="width:80px;height:80">
+  <img src="http://octopress.org/images/logo.png?1420306322" alt="Octopress" style="width:80px;height:80">
+  <img src="https://d3oypxn00j2a10.cloudfront.net/0.17.3/images/pages/brand_guidelines/small_v-dark.png" alt="Docker" style="width:80px;height:80">
+</center>
+</footer>
+    
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+  </div>
+  <script src="/javascripts/modernizr-2.0.js"></script>
+<script src="//ajax.useso.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+<script src="/javascripts/libs/respond.js" type="text/javascript"></script>
+<script src="/javascripts/octopress.js" type="text/javascript"></script>
+
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    if (!window.jXHR){
+      var jxhr = document.createElement('script');
+      jxhr.type = 'text/javascript';
+      jxhr.src = '/javascripts/libs/jXHR.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jxhr, s);
+    }
+
+    github.showRepos({
+      user: 'jayendren',
+      count: 0,
+      skip_forks: true,
+      target: '#gh_repos'
+    });
+  });
+  </script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var userAgent = navigator.userAgent.toLowerCase();
+  var isiPhone = (userAgent.indexOf('iphone') != -1 || userAgent.indexOf('ipod') != -1) ? true : false;
+  var isAndroid = (userAgent.indexOf('android') != -1) ? true : false;
+  clickEvent = (isiPhone || isAndroid) ? 'touchstart' : 'click';
+  $('#sidebar').on(clickEvent, function() {
+    $(this).toggleClass('open');
+  });
+  $('.articlemeta').on(clickEvent, function() {
+    toggleDisqus();
+    $(this).toggleClass('open');
+  });
+});
+</script>
+
+</body>
+</html>
