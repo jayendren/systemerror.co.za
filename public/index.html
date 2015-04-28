@@ -9,7 +9,7 @@
   <meta name="author" content="jayendren">
 
   
-  <meta name="description" content="　 RANDOM ramblings The Anything Store thanks @tgenov, www.amazon.com/dp/&hellip; FreeBSD Nginx+passenger FreeBSD EZJAILS Puppet User Group &hellip;">
+  <meta name="description" content="　 RANDOM ramblings How to Configure and Verify the DHCP Relay for EX-series Switches sample config for dhcp-relay on juniper EX switchs, kb.juniper. &hellip;">
   
 
   <meta name="HandheldFriendly" content="True">
@@ -63,6 +63,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/04/28/DHCP-relay-for-EX-series/">How to Configure and Verify the DHCP Relay for EX-series Switches</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/04/28/the-anything-store/">The Anything Store</a>
       </li>
     
@@ -76,10 +80,6 @@
     
       <li class="post">
         <a href="/blog/2015/04/21/puppet-usergroup-foreman/">Puppet User Group Johannesburg - Foreman</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/03/16/ekto_scaper/">Ruby ektoplazm.com Scraper</a>
       </li>
     
   </ul>
@@ -118,13 +118,133 @@
     
   
   <li class="entry first-entry">
-    <h2 class="entry-title"><a href="/blog/2015/04/28/the-anything-store/">The Anything Store</a></h2>
+    <h2 class="entry-title"><a href="/blog/2015/04/28/DHCP-relay-for-EX-series/">How to Configure and Verify the DHCP Relay for EX-series Switches</a></h2>
     
-      <div class="entry-content"><p><img class="center" src="http://ecx.images-amazon.com/images/I/51N7s0z8kXL._AC_SX75_CR,0,0,75,75_.jpg" /></p>
-<blockquote><p></p><footer><strong>thanks @tgenov,</strong> <cite><a href="http://www.amazon.com/The-Everything-Store-Bezos-Amazon/dp/0316219266#reader_B00DJ3ITKS">www.amazon.com/dp/&hellip;</a></cite></footer></blockquote>
+      <div class="entry-content"><p><img class="center" src="http://kb.juniper.net/shared/img/header/logo-top-m.gif" /></p>
+<blockquote><p></p><footer><strong>sample config for dhcp-relay on juniper EX switchs,</strong> <cite><a href="http://kb.juniper.net/InfoCenter/index?page=content&amp;id=KB11020">kb.juniper.net/InfoCenter/&hellip;</a></cite></footer></blockquote>
+<p>SUMMARY:
+This article provides information on how to configure and verify the DHCP relay for the EX-series switches.</p>
+
+<p>PROBLEM OR GOAL:
+How to configure and verify the DHCP relay for the EX-series switches.
+CAUSE:</p>
+
+<p>SOLUTION:
+Topology:</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">[Client PC] --- ge-0/0/0 [EX Switch] ge0/0/1 --- [DHCP Server]</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>Client PC is in VLAN 10.</p>
+
+<p>The DHCP server is in VLAN 20 with the 20.20.20.2 IP address.</p>
+
+<p>The EX switch is configured as DHCP relay and performs inter VLAN routing between VLANs 10 and 20.</p>
+
+<p>Configuration:</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">set vlans vlan10 vlan-id 10
+</span><span class="line">set interfaces ge-0/0/0 unit 0 family ethernet-switching vlan members vlan10
+</span><span class="line">set vlans vlan10 l3-interface vlan.10
+</span><span class="line">set interfaces vlan unit 10 family inet address 10.10.10.1/24
+</span><span class="line">
+</span><span class="line">set vlans vlan20 vlan-id 20
+</span><span class="line">set interfaces ge-0/0/1 unit 0 family ethernet-switching vlan members vlan20
+</span><span class="line">set interfaces vlan unit 20 family inet address 20.20.20.1/24
+</span><span class="line">set vlans vlan20 l3-interface vlan.20
+</span><span class="line">set forwarding-options helpers bootp server 20.20.20.2
+</span><span class="line">set forwarding-options helpers bootp interface vlan.10</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>Note: VLAN.10 Routed VLAN Interface (RVI) is configured for bootp relay, so that bootp packets in VLAN 10 will be routed to the &#8216;20.20.20.2&#8217; server in VLAN 20. Configure the specific RVIs, to which the bootp packets should be forwarded. A separate server can be configured under the &#8216;bootp interface vlan.X&#8217; stanza for only that specific VLAN. A global server IP can also be specified (as above), which is applicable for all RVI interfaces.</p>
+
+<p>Verifying the DHCP Relay configuration on an EX switch:</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">juniper@EX&gt; show configuration forwarding-options
+</span><span class="line">helpers {
+</span><span class="line">    bootp {
+</span><span class="line">        server 20.20.20.2;
+</span><span class="line">        interface {
+</span><span class="line">            vlan.20;
+</span><span class="line">        }
+</span><span class="line">    }
+</span><span class="line">}</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>Verifying relay agent activity on EX:</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">juniper@EX&gt; show helper statistics 
+</span><span class="line">bootps:
+</span><span class="line">Received packets: 4
+</span><span class="line">Forwarded packets: 4
+</span><span class="line">Dropped packets: 0
+</span><span class="line">Due to no interface in fud database: 0
+</span><span class="line">Due to no matching routing instance: 0
+</span><span class="line">Due to an error during packet read: 0
+</span><span class="line">Due to an error during packet send: 0
+</span><span class="line">Due to invalid server address: 0
+</span><span class="line">Due to no valid local address: 0
+</span><span class="line">Due to no route to server/client: 0</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>Note: The 4 packets shown above are packets that are relayed from the client to the server (Discover, Request) and from the server to the client (Offer, Ack) by the EX switch.</p>
+
+<p>To see DHCP packets entering or exiting an interface, the monitor traffic interface <int-name> command can be used.</int-name></p>
+
+<p>To debug relay agent activity on EX :</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">[edit]
+</span><span class="line">set forwarding-options helpers traceoptions file helper
+</span><span class="line">set forwarding-options helpers traceoptions flag bootp
+</span><span class="line">set forwarding-options helpers traceoptions level level</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>After forwarding activity, the /var/log/helper file can be viewed. By default, helper activity is logged in /var/log/fud, which is viewed by using show log fud.</p>
+
+<p>Troubleshooting Tip: When the debugs and show commands that verify bootp packets are being relayed or forwarded, if the IP address is still not obtained, check the path between the client&#8217;s gateway and the DHCP server. Ensure that routes are in place and no firewall rules are blocking these bootp packets.</p>
+
+<p>Caution:</p>
+
+<p>Debugs using traceoptions should be used with care; especially on a busy router or switch.  It is advisable to turn them on only for specific feature(s) at any given time, and for specific flag and level options of interest and turn them off, when no longer needed. Else, this can cause high CPU activity and affect other processes.</p>
+
+<p>Monitoring live output by &#8216;monitor start <trace-file-name>&#8217; can generate excess network traffic, if there is too much data; so avoid it in a busy production environment and use the trace files for viewing later.</trace-file-name></p>
 </div>
       
       
+    
+  </li>
+  
+
+
+  
+    
+    
+    
+  
+  <li class="entry ">
+    <h2 class="entry-title"><a href="/blog/2015/04/28/the-anything-store/">The Anything Store</a></h2>
     
   </li>
   
