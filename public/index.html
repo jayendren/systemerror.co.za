@@ -9,7 +9,7 @@
   <meta name="author" content="jayendren">
 
   
-  <meta name="description" content="　 RANDOM ramblings How to Configure and Verify the DHCP Relay for EX-series Switches sample config for dhcp-relay on juniper EX switchs, kb.juniper. &hellip;">
+  <meta name="description" content="　 RANDOM ramblings Git Flow Cheat Sheet excellent cheatsheet from danielkummer.github.io/&hellip; About git-flow are a set of git extensions to &hellip;">
   
 
   <meta name="HandheldFriendly" content="True">
@@ -53,7 +53,7 @@
 
 <ul class="main-navigation">
   <li><a href="/">home</a></li>
-  <li><a href="//wg.dotkrnl.com/p/public">public</a></li>
+  <li><a href="/blog/archives">archives</a></li>
 </ul>
 
 
@@ -62,6 +62,10 @@
         <section>
   <h2>recent</h2>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/04/29/gitflow-cheatsheet/">Git Flow Cheat Sheet</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2015/04/28/DHCP-relay-for-EX-series/">How to Configure and Verify the DHCP Relay for EX-series Switches</a>
@@ -73,10 +77,6 @@
     
       <li class="post">
         <a href="/blog/2015/04/27/freebsd-nginx_passenger/">FreeBSD Nginx+passenger</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/04/27/gitflow-cheatsheet/">Gitflow Cheatsheet</a>
       </li>
     
       <li class="post">
@@ -119,121 +119,205 @@
     
   
   <li class="entry first-entry">
-    <h2 class="entry-title"><a href="/blog/2015/04/28/DHCP-relay-for-EX-series/">How to Configure and Verify the DHCP Relay for EX-series Switches</a></h2>
+    <h2 class="entry-title"><a href="/blog/2015/04/29/gitflow-cheatsheet/">Git Flow Cheat Sheet</a></h2>
     
-      <div class="entry-content"><p><img class="center" src="http://kb.juniper.net/shared/img/header/logo-top-m.gif" /></p>
-<blockquote><p></p><footer><strong>sample config for dhcp-relay on juniper EX switchs,</strong> <cite><a href="http://kb.juniper.net/InfoCenter/index?page=content&amp;id=KB11020">kb.juniper.net/InfoCenter/&hellip;</a></cite></footer></blockquote>
-<p>SUMMARY:
-This article provides information on how to configure and verify the DHCP relay for the EX-series switches.</p>
+      <div class="entry-content"><blockquote><p></p><footer><strong>excellent cheatsheet from</strong> <cite><a href="http://danielkummer.github.io/git-flow-cheatsheet">danielkummer.github.io/&hellip;</a></cite></footer></blockquote>
 
-<p>PROBLEM OR GOAL:
-How to configure and verify the DHCP relay for the EX-series switches.
-CAUSE:</p>
+<p>About</p>
 
-<p>SOLUTION:
-Topology:</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">[Client PC] --- ge-0/0/0 [EX Switch] ge0/0/1 --- [DHCP Server]</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>Client PC is in VLAN 10.</p>
+<p>git-flow are a set of git extensions to provide high-level repository operations for Vincent Driessen’s branching model. more</p>
 
-<p>The DHCP server is in VLAN 20 with the 20.20.20.2 IP address.</p>
+<p>★ ★ ★</p>
 
-<p>The EX switch is configured as DHCP relay and performs inter VLAN routing between VLANs 10 and 20.</p>
+<p>This cheatsheet shows the basic usage and effect of git-flow operations</p>
 
-<p>Configuration:</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">set vlans vlan10 vlan-id 10
-</span><span class="line">set interfaces ge-0/0/0 unit 0 family ethernet-switching vlan members vlan10
-</span><span class="line">set vlans vlan10 l3-interface vlan.10
-</span><span class="line">set interfaces vlan unit 10 family inet address 10.10.10.1/24
-</span><span class="line">
-</span><span class="line">set vlans vlan20 vlan-id 20
-</span><span class="line">set interfaces ge-0/0/1 unit 0 family ethernet-switching vlan members vlan20
-</span><span class="line">set interfaces vlan unit 20 family inet address 20.20.20.1/24
-</span><span class="line">set vlans vlan20 l3-interface vlan.20
-</span><span class="line">set forwarding-options helpers bootp server 20.20.20.2
-</span><span class="line">set forwarding-options helpers bootp interface vlan.10</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>Note: VLAN.10 Routed VLAN Interface (RVI) is configured for bootp relay, so that bootp packets in VLAN 10 will be routed to the &#8216;20.20.20.2&#8217; server in VLAN 20. Configure the specific RVIs, to which the bootp packets should be forwarded. A separate server can be configured under the &#8216;bootp interface vlan.X&#8217; stanza for only that specific VLAN. A global server IP can also be specified (as above), which is applicable for all RVI interfaces.</p>
+<p>★ ★ ★
+Basic tips</p>
 
-<p>Verifying the DHCP Relay configuration on an EX switch:</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">juniper@EX&gt; show configuration forwarding-options
-</span><span class="line">helpers {
-</span><span class="line">    bootp {
-</span><span class="line">        server 20.20.20.2;
-</span><span class="line">        interface {
-</span><span class="line">            vlan.20;
-</span><span class="line">        }
-</span><span class="line">    }
-</span><span class="line">}</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>Verifying relay agent activity on EX:</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">juniper@EX&gt; show helper statistics 
-</span><span class="line">bootps:
-</span><span class="line">Received packets: 4
-</span><span class="line">Forwarded packets: 4
-</span><span class="line">Dropped packets: 0
-</span><span class="line">Due to no interface in fud database: 0
-</span><span class="line">Due to no matching routing instance: 0
-</span><span class="line">Due to an error during packet read: 0
-</span><span class="line">Due to an error during packet send: 0
-</span><span class="line">Due to invalid server address: 0
-</span><span class="line">Due to no valid local address: 0
-</span><span class="line">Due to no route to server/client: 0</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>Note: The 4 packets shown above are packets that are relayed from the client to the server (Discover, Request) and from the server to the client (Offer, Ack) by the EX switch.</p>
+<pre><code>Git flow provides excellent command line help and output. Read it carefully to see what's happening...
+The OSX/Windows Client Sourcetree is an excellent git gui and provides git-flow support
+Git-flow is a merge based solution. It doesn't rebase feature branches.
+</code></pre>
 
-<p>To see DHCP packets entering or exiting an interface, the monitor traffic interface <int-name> command can be used.</int-name></p>
+<p>★ ★ ★
+Setup</p>
 
-<p>To debug relay agent activity on EX :</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">[edit]
-</span><span class="line">set forwarding-options helpers traceoptions file helper
-</span><span class="line">set forwarding-options helpers traceoptions flag bootp
-</span><span class="line">set forwarding-options helpers traceoptions level level</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>After forwarding activity, the /var/log/helper file can be viewed. By default, helper activity is logged in /var/log/fud, which is viewed by using show log fud.</p>
+<pre><code>You need a working git installation as prerequisite.
+Git flow works on OSX, Linux and Windows
+</code></pre>
 
-<p>Troubleshooting Tip: When the debugs and show commands that verify bootp packets are being relayed or forwarded, if the IP address is still not obtained, check the path between the client&#8217;s gateway and the DHCP server. Ensure that routes are in place and no firewall rules are blocking these bootp packets.</p>
+<p>★ ★ ★
+OSX
+Homebrew</p>
 
-<p>Caution:</p>
+<pre><code>$ brew install git-flow 
+</code></pre>
 
-<p>Debugs using traceoptions should be used with care; especially on a busy router or switch.  It is advisable to turn them on only for specific feature(s) at any given time, and for specific flag and level options of interest and turn them off, when no longer needed. Else, this can cause high CPU activity and affect other processes.</p>
+<p>Macports</p>
 
-<p>Monitoring live output by &#8216;monitor start <trace-file-name>&#8217; can generate excess network traffic, if there is too much data; so avoid it in a busy production environment and use the trace files for viewing later.</trace-file-name></p>
+<pre><code>$ port install git-flow 
+</code></pre>
+
+<p>Linux</p>
+
+<pre><code>$ apt-get install git-flow 
+</code></pre>
+
+<p>Windows (Cygwin)</p>
+
+<pre><code>$ wget -q -O - --no-check-certificate https://github.com/nvie/gitflow/raw/develop/contrib/gitflow-installer.sh | bash 
+</code></pre>
+
+<p>You need wget and util-linux to install git-flow.</p>
+
+<p>For detailed git flow intallation instructions please visit the git flow wiki.
+install git-flow
+Getting started</p>
+
+<p>Git flow needs to be initialized in order to customize your project setup.</p>
+
+<p>★ ★ ★
+Initialize</p>
+
+<p>Start using git-flow by initializing it inside an existing git repository:</p>
+
+<pre><code>git flow init 
+</code></pre>
+
+<p>You’ll have to answer a few questions regarding the naming conventions for your branches.
+It’s recommended to use the default values.
+Features</p>
+
+<pre><code>Develop new features for upcoming releases
+Typically exist in developers repos only
+</code></pre>
+
+<p>★ ★ ★
+Start a new feature</p>
+
+<p>Development of new features starting from the ‘develop’ branch.</p>
+
+<p>Start developing a new feature with</p>
+
+<pre><code>git flow feature start MYFEATURE 
+</code></pre>
+
+<p>This action creates a new feature branch based on ‘develop’ and switches to it
+Finish up a feature</p>
+
+<p>Finish the development of a feature. This action performs the following</p>
+
+<pre><code>Merged MYFEATURE into 'develop'
+Removes the feature branch
+Switches back to 'develop' branch
+
+git flow feature finish MYFEATURE 
+</code></pre>
+
+<p>Publish a feature</p>
+
+<p>Are you developing a feature in collaboration?
+Publish a feature to the remote server so it can be used by other users.</p>
+
+<pre><code>git flow feature publish MYFEATURE 
+</code></pre>
+
+<p>Getting a published feature</p>
+
+<p>Get a feature published by another user.</p>
+
+<pre><code>git flow feature pull origin MYFEATURE 
+</code></pre>
+
+<p>You can track a feature on origin by using git flow feature track MYFEATURE
+Make a release</p>
+
+<pre><code>Support preparation of a new production release
+Allow for minor bug fixes and preparing meta-data for a release
+</code></pre>
+
+<p>★ ★ ★
+Start a release</p>
+
+<p>To start a release, use the git flow release command. It creates a release branch created from the ‘develop’ branch.</p>
+
+<pre><code>git flow release start RELEASE [BASE] 
+</code></pre>
+
+<p>You can optionally supply a [BASE] commit sha-1 hash to start the release from. The commit must be on the ‘develop’ branch.</p>
+
+<p>★ ★ ★</p>
+
+<p>It’s wise to publish the release branch after creating it to allow release commits by other developers. Do it similar to feature publishing with the command:</p>
+
+<pre><code>git flow release publish RELEASE 
+</code></pre>
+
+<p>(You can track a remote release with the
+git flow release track RELEASE command)
+Finish up a release</p>
+
+<p>Finishing a release is one of the big steps in git branching. It performs several actions:</p>
+
+<pre><code>Merges the release branch back into 'master'
+Tags the release with its name
+Back-merges the release into 'develop'
+Removes the release branch
+
+git flow release finish RELEASE 
+</code></pre>
+
+<p>Don’t forget to push your tags withgit push –tags
+Hotfixes</p>
+
+<pre><code>Hotfixes arise from the necessity to act immediately upon an undesired state of a live production version
+May be branched off from the corresponding tag on the master branch that marks the production version.
+</code></pre>
+
+<p>★ ★ ★
+git flow hotfix start</p>
+
+<p>Like the other git flow commands, a hotfix is started with</p>
+
+<pre><code>git flow hotfix start VERSION [BASENAME] 
+</code></pre>
+
+<p>The version argument hereby marks the new hotfix release name. Optionally you can specify a basename to start from.
+Finish a hotfix</p>
+
+<p>By finishing a hotfix it gets merged back into develop and master. Additionally the master merge is tagged with the hotfix version.</p>
+
+<pre><code>git flow hotfix finish VERSION 
+</code></pre>
+
+<p>Commands
+git-flow commands
+Backlog</p>
+
+<p>★ ★ ★</p>
+
+<pre><code>Not all available commands are covered here, only the most important ones
+You can still use git and all its commands normally as you know them, git flow is only a tooling collection
+The 'support' feature is still beta, using it is not advised
+If you'd like to supply translations I'd be happy to integrate them
+</code></pre>
+
+<p>★ ★ ★</p>
 </div>
       
       
+    
+  </li>
+  
+
+
+  
+    
+    
+    
+  
+  <li class="entry ">
+    <h2 class="entry-title"><a href="/blog/2015/04/28/DHCP-relay-for-EX-series/">How to Configure and Verify the DHCP Relay for EX-series Switches</a></h2>
     
   </li>
   
@@ -258,18 +342,6 @@ Topology:</p>
   
   <li class="entry ">
     <h2 class="entry-title"><a href="/blog/2015/04/27/freebsd-nginx_passenger/">FreeBSD Nginx+passenger</a></h2>
-    
-  </li>
-  
-
-
-  
-    
-    
-    
-  
-  <li class="entry ">
-    <h2 class="entry-title"><a href="/blog/2015/04/27/gitflow-cheatsheet/">Gitflow Cheatsheet</a></h2>
     
   </li>
   
