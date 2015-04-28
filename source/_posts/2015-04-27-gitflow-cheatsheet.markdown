@@ -7,12 +7,10 @@ categories: git
 ---
 {% blockquote excellent cheatsheet from http://danielkummer.github.io/git-flow-cheatsheet %}
 {% endblockquote %}
-
+★ ★ ★
 About
 
-git-flow are a set of git extensions to provide high-level repository operations for Vincent Driessen's branching model. more
-
-★ ★ ★
+git-flow are a set of git extensions to provide high-level repository operations for Vincent Driessen's branching model.
 
 This cheatsheet shows the basic usage and effect of git-flow operations
 
