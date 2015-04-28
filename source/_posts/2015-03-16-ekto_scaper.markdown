@@ -3,7 +3,7 @@ layout: post
 title: "ruby ektoplazm.com scraper"
 date: 2015-03-16 15:20
 comments: true
-categories: general
+categories: ruby
 ---
 {% img center http://www.ektoplazm.com/i/g-header.jpg %}
 ``` 

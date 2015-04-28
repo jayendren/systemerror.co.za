@@ -3,7 +3,7 @@ layout: post
 title: "Puppet User Group Johannesburg - Foreman"
 date: 2015-04-21 18:45
 comments: true
-categories: general
+categories: puppet
 ---
 {% img center http://photos3.meetupstatic.com/photos/event/c/1/7/a/global_434209530.jpeg %}
 

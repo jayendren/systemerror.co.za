@@ -3,7 +3,7 @@ layout: post
 title: "FreeBSD EZJAILS"
 date: 2015-04-26 18:45
 comments: true
-categories: general
+categories: freebsd ezjails
 ---
 {% img center https://forums.freebsd.org/styles/freebsd/xenforo/freebsd_logo.png %}
 

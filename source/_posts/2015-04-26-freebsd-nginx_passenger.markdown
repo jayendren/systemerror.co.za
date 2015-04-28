@@ -3,7 +3,7 @@ layout: post
 title: "FreeBSD nginx+passenger"
 date: 2015-04-27 18:45
 comments: true
-categories: general
+categories: freebsd puppet passenger nginx
 ---
 {% img center https://forums.freebsd.org/styles/freebsd/xenforo/freebsd_logo.png %}
 
