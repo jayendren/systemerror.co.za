@@ -4,7 +4,7 @@ title: "Git Flow Cheat Sheet
 comments: true
 categories: git
 ---
-{% blockquote from, http://danielkummer.github.io/git-flow-cheatsheet/ %}
+{% blockquote from, http://danielkummer.github.io/git-flow-cheatsheet %}
 {% endblockquote %}
 
 About
