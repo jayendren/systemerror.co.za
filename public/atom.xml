@@ -4,7 +4,7 @@
   <title><![CDATA[RANDOM ramblings]]></title>
   <link href="http://www.systemerror.co.za/atom.xml" rel="self"/>
   <link href="http://www.systemerror.co.za/"/>
-  <updated>2015-04-28T21:55:41+00:00</updated>
+  <updated>2015-04-28T22:05:56+00:00</updated>
   <id>http://www.systemerror.co.za/</id>
   <author>
     <name><![CDATA[jayendren]]></name>
@@ -209,6 +209,17 @@ Topology:</p>
 </span><span class="line">				--with-http_ssl_module \
 </span><span class="line">				--with-http_stub_status_module \
 </span><span class="line">				--with-ipv6"</span></code></pre></td></tr></table></div></figure></notextile></div>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Gitflow Cheatsheet]]></title>
+    <link href="http://www.systemerror.co.za/blog/2015/04/27/gitflow-cheatsheet/"/>
+    <updated>2015-04-27T00:00:00+00:00</updated>
+    <id>http://www.systemerror.co.za/blog/2015/04/27/gitflow-cheatsheet</id>
+    <content type="html"><![CDATA[<blockquote><p></p><footer><strong>from,</strong> <cite><a href="http://danielkummer.github.io/git-flow-cheatsheet/">danielkummer.github.io/&hellip;</a></cite></footer></blockquote>
+<iframe class="cmd" src="http://danielkummer.github.io/git-flow-cheatsheet/" width="1024" height="768">
+</iframe>
 ]]></content>
   </entry>
   
