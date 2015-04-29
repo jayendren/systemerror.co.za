@@ -16,7 +16,7 @@ This is a great feature but sometimes you need more control over the containerâ€
 
 Imagine having a container which is linked to another one. Docker does not provide any way of specifying which container should be started when or what to do if a container dies.
 
-Deployment scenario
+  Deployment scenario
 
 Consider this pretty simple deployment:
 
