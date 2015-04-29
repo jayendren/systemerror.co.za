@@ -6,6 +6,7 @@ comments: true
 categories: ruby nagios soi
 ---
 {% img center http://assets.nagios.com/images/header/Nagios.png %}
+
 ### About:
 
 Ruby daemon to post nagios alerts to CA SOI.
@@ -179,7 +180,7 @@ require 'facter'
 @fqdn        = Facter.value('fqdn')
 @xmpp_pass   = "passwd"                                   # xmpp password
 @xmpp_host   = "openfire01.ops.lan\:5222"                 # xmpp host:port
-@xmpp_room   = "noise\@chat.int.lan"          # xmpp chat room
+@xmpp_room   = "noise\@chat.int.lan"                      # xmpp chat room
 @xmpp_cmd    = " | sendxmpp -i -s 'nagios xmpp alert' -d -v -u nagbot-00#{@host_no} -p '#{@xmpp_pass}' -j #{@xmpp_host} -c #{@xmpp_room} -r nagbot-00#{@host_no}"  # send xmpp alert to chat
 # mail
 @mail_rcpt   = "sysadmin@lan"
