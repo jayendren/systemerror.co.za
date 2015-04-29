@@ -283,7 +283,7 @@ nagbot_soi = Proc.new do
       @logger.info "ci_timestamp    : #{ci_timestamp}"
       @logger.info "alert_timestamp : #{alert_timestamp}"
       @logger.info "alarm           : #{@alarm}"
-      #@logger.info "posting         : #{@soi_post}"
+      @logger.info "posting         : #{@soi_post}"
 
       # soi post:
       #nagbot_soi_post(@soi_post)
