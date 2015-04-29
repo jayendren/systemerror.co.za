@@ -157,10 +157,6 @@ root    90076  0.0  0.1 29712  9332   0  I     4:13PM   0:00.01 /usr/local/bin/r
   * Remember that if the bot joins the 'wrong' channel, that channel would be auto created into existence.
 
 ~~~ ruby 
-#!/usr/bin/env ruby
-# daemon to post nagios alerts (from a named pipe) to SOI environment 
-# author: jayendren maduray <jayendren@gmail.com>
-
 require 'rubygems'
 require 'logger'
 require 'uri'
