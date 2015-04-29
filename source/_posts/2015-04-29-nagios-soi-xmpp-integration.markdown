@@ -14,6 +14,7 @@ Implementation spawned from Traiano's perl/xmpp nagbot
 and performs xmpp posts to a chat room
 
 ### Requirements:
+
 #### Ruby:
 
 * Ruby187
@@ -28,6 +29,7 @@ and performs xmpp posts to a chat room
 * sendxmpp - http://www.djcbsoftware.nl/code/sendxmpp
 
 #### Nagios:
+
 * nagios server needs to be configured to write alerts to a named pipe/fifo in:
 * nagios/etc/check_commands.cfg:
 
@@ -51,6 +53,7 @@ and performs xmpp posts to a chat room
    `mkfifo /var/spool/nagios/rw/ndbot.fifo`
 
 #### FreeBSD:
+
 * Copy of the rc_nagbot_soi script as:
   `/usr/local/etc/rc.d/nagbot_soi`
 with executable permissions
@@ -60,6 +63,7 @@ with executable permissions
   `/usr/local/sbin/nagbot_soi.rb`
 
 #### SOI:
+
 * Example post (dev environment):
   `http://soi.lab/Soi/default.aspx?insid=win123001&sitmsg=cpu1&sev=4&alarm=54256`
 * Definitions:
@@ -116,23 +120,24 @@ with executable permissions
 
 ### Global variables:
   
-  @nagios_fifo = "/var/spool/nagios/rw/ndbot.fifo"         # path to nagios named pipe
-  @log         = "/var/spool/nagios/nagbot_soi.log"        # path to logfile for this daemon
-  @log_size    = 1024000                                   # logfile size in kb
-  @logger      = Logger.new(@log, @log_size)               # logger instance
-  @soi_prot    = "http"                                    # http or https
-  @soi_host    = "soi.lan"                                 # ipv4/fqdn
-  @soi_api     = "Soi/default.aspx?"                       # api 
-  @soi_url     = "#{@soi_prot}://#{@soi_host}/#{@soi_api}" # soi url to post
-  @soi_timeout = 600                                       # number of seconds after to wait before giving up
-  @soi_retries = 5                                         # number of times to retry posting before giving up
-  @host_no     = Facter.value('fqdn').split(/\./)[0].split(/0/)[1] # return server number, e.g nagios01.noc => 1
-  @xmpp_pass   = "passwd"                                  # xmpp password
-  @xmpp_host   = "openfire01.ops.lan:5222"   # xmpp host:port
-  @xmpp_room   = "noise\@chat.int.mtnbusiness.net"         # xmpp chat room
-  @xmpp_cmd    = " | sendxmpp -i -s 'nagios xmpp alert' -d -v -u nagbot-00#{@host_no} -p '#{@xmpp_pass}' -j #{@xmpp_host} -c #{@xmpp_room} -r nagbot-00#{@host_no}"  # send xmpp alert to chat
+    @nagios_fifo = "/var/spool/nagios/rw/ndbot.fifo"         # path to nagios named pipe
+    @log         = "/var/spool/nagios/nagbot_soi.log"        # path to logfile for this daemon
+    @log_size    = 1024000                                   # logfile size in kb
+    @logger      = Logger.new(@log, @log_size)               # logger instance
+    @soi_prot    = "http"                                    # http or https
+    @soi_host    = "soi.lan"                                 # ipv4/fqdn
+    @soi_api     = "Soi/default.aspx?"                       # api 
+    @soi_url     = "#{@soi_prot}://#{@soi_host}/#{@soi_api}" # soi url to post
+    @soi_timeout = 600                                       # number of seconds after to wait before giving up
+    @soi_retries = 5                                         # number of times to retry posting before giving up
+    @host_no     = Facter.value('fqdn').split(/\./)[0].split(/0/)[1] # return server number, e.g nagios01.noc => 1
+    @xmpp_pass   = "passwd"                                  # xmpp password
+    @xmpp_host   = "openfire01.ops.lan:5222"   # xmpp host:port
+    @xmpp_room   = "noise\@chat.int.mtnbusiness.net"         # xmpp chat room
+    @xmpp_cmd    = " | sendxmpp -i -s 'nagios xmpp alert' -d -v -u nagbot-00#{@host_no} -p '#{@xmpp_pass}' -j #{@xmpp_host} -c #{@xmpp_room} -r nagbot-00#{@host_no}"  # send xmpp alert to chat
 
 ### Troubleshooting:
+
 * Start the daemon:
   `/usr/local/etc/rc.d/nagbot_soi start`
 * In a seperate console, watch the logfile: 
@@ -152,7 +157,6 @@ root    90076  0.0  0.1 29712  9332   0  I     4:13PM   0:00.01 /usr/local/bin/r
   * Remember that if the bot joins the 'wrong' channel, that channel would be auto created into existence.
 
 ~~~ ruby 
-
 #!/usr/bin/env ruby
 # daemon to post nagios alerts (from a named pipe) to SOI environment 
 # author: jayendren maduray <jayendren@gmail.com>
@@ -308,11 +312,10 @@ nagbot_soi = Proc.new do
 end # Proc
 
 fork { nagbot_soi.call }
-
 ~~~
 
-RC Script
-=========
+### RC Script
+
 
     #!/bin/sh
     # bsd rc-compliant startup script for nagbot_soi ruby daemon
