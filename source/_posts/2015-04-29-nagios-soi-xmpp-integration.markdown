@@ -132,8 +132,8 @@ with executable permissions
     @soi_retries = 5                                         # number of times to retry posting before giving up
     @host_no     = Facter.value('fqdn').split(/\./)[0].split(/0/)[1] # return server number, e.g nagios01.noc => 1
     @xmpp_pass   = "passwd"                                  # xmpp password
-    @xmpp_host   = "openfire01.ops.lan:5222"   # xmpp host:port
-    @xmpp_room   = "noise\@chat.int.lan"         # xmpp chat room
+    @xmpp_host   = "openfire01.ops.lan:5222"                 # xmpp host:port
+    @xmpp_room   = "noise\@chat.int.lan"                     # xmpp chat room
     @xmpp_cmd    = " | sendxmpp -i -s 'nagios xmpp alert' -d -v -u nagbot-00#{@host_no} -p '#{@xmpp_pass}' -j #{@xmpp_host} -c #{@xmpp_room} -r nagbot-00#{@host_no}"  # send xmpp alert to chat
 
 ### Troubleshooting:
