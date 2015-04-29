@@ -151,7 +151,7 @@ root    90076  0.0  0.1 29712  9332   0  I     4:13PM   0:00.01 /usr/local/bin/r
   `echo "this is a CRIT message" > /var/spool/nagios/rw/ndbot.fifo`
 * If are no packets, it's intermediary ACLs.
 * If you do see packets outgoing but no responses inbound, confirm firewall rules.
-* If you see responses going out, confirm that there are no issues with the SOI host with the Enterpise Monitoring team.
+* If you see responses going out, confirm that there are no issues with the SOI host
 * For XMPP - 
   * If all seems well at the network level but you're not seeing any data in the actual jabber channel, check the bot and you are in the same channel.
   * Remember that if the bot joins the 'wrong' channel, that channel would be auto created into existence.
@@ -259,9 +259,9 @@ nagbot_soi = Proc.new do
         @state = 4
       end    
 
-      @data     = @alert.split("\s")                                                                    # convert entry in fifo to array
-      @ci       = @data[0]                                                                              # extract hostname from array
-      @sitmsg   = @data[1..-1].join(",").to_s.gsub(/\,/, " ")                                           # extract alert message from array
+      @data     = @alert.split("\s")                            # convert entry in fifo to array
+      @ci       = @data[0]                                      # extract hostname from array
+      @sitmsg   = @data[1..-1].join(",").to_s.gsub(/\,/, " ")   # extract alert message from array
 
       # alarm id for clearing needs to match the critical alert
       begin
