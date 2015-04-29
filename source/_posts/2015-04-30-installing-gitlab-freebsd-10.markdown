@@ -5,7 +5,8 @@ date: 2015-04-30 00:32
 comments: true
 categories: git freebsd
 ---
-{% img center http://assets.nagios.com/images/header/Nagios.png %}
+{% img center https://forums.freebsd.org/styles/freebsd/xenforo/freebsd_logo.png %}
+{% img center https://about.gitlab.com/images/wordmark_inverted_small.png %}
 {% blockquote from https://blog.assemblyco.de/installing-gitlab-on-freebsd-10 %}
 {% endblockquote %}
 
