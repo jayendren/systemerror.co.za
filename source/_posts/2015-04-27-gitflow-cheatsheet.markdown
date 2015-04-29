@@ -17,9 +17,11 @@ This cheatsheet shows the basic usage and effect of git-flow operations
 ★ ★ ★
 Basic tips
 
-    Git flow provides excellent command line help and output. Read it carefully to see what's happening...
+    Git flow provides excellent command line help and output. 
+    Read it carefully to see what's happening...
     The OSX/Windows Client Sourcetree is an excellent git gui and provides git-flow support
-    Git-flow is a merge based solution. It doesn't rebase feature branches.
+    Git-flow is a merge based solution. 
+    It doesn't rebase feature branches.
 
 ★ ★ ★
 Setup
