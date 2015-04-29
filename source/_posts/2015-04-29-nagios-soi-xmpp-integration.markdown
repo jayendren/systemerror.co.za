@@ -286,8 +286,8 @@ nagbot_soi = Proc.new do
       @logger.info "posting         : #{@soi_post}"
 
       # soi post:
-      #nagbot_soi_post(@soi_post)
-      #@logger.info "reply           : #{@soi_response}"
+      nagbot_soi_post(@soi_post)
+      @logger.info "reply           : #{@soi_response}"
 
       # xmpp post:
       @logger.info "xmpp            : echo '#{@alert}' #{@xmpp_cmd}"
