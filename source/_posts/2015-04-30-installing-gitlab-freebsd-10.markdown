@@ -12,14 +12,14 @@ categories: git freebsd
 
 ### 1. Update system
 
-pkg update  
-pkg upgrade  
+    pkg update  
+    pkg upgrade  
 
 ### 2. Install dependencies
 
 #### Install system packages:
 
-pkg install sudo bash icu cmake pkgconf git nginx ruby ruby20-gems logrotate redis postgresql94-server postfix krb5  
+    pkg install sudo bash icu cmake pkgconf git nginx ruby ruby20-gems logrotate redis postgresql94-server postfix krb5  
 
 #### Install bundler gem system-wide:
 
@@ -51,11 +51,11 @@ Add this to /etc/rc.conf:
 
 #### Set up user and groups:
 
-# Create user
-pw add user -n git -m -s /usr/local/bin/bash -c "GitLab"
+    # Create user
+    pw add user -n git -m -s /usr/local/bin/bash -c "GitLab"
 
-# Add 'git' user to 'redis' group (this will come in useful later!)
-pw user mod git -G redis  
+    # Add 'git' user to 'redis' group (this will come in useful later!)
+    pw user mod git -G redis  
 
 ### 4. Set up Postgres database
 
