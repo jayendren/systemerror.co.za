@@ -16,17 +16,20 @@ This is a great feature but sometimes you need more control over the container�
 
 Imagine having a container which is linked to another one. Docker does not provide any way of specifying which container should be started when or what to do if a container dies.
 
-  Deployment scenario
+Deployment scenario
+-------------------
 
 Consider this pretty simple deployment:
 
 Deployment example
+------------------
 
 {% img https://goldmann.pl/images/systemd_deployment.png %}
 
 When we start such a deployment we need to ensure that the database is started first, so we can later link it to the WildFly node.
 
 Note
+----
 
 The load balancer set up is not part of this guide, but is shown (along with another WildFly node) using a dotted outline. The mod_cluster project may be a good choice for a load balancer.
 We’ll use following images to power this setup:
@@ -34,12 +37,14 @@ We’ll use following images to power this setup:
 fedora/mariadb for the the database a custom image based on jboss/wildfly to run the node
 
 systemd to the rescue
+---------------------
 
 Systemd is a system management daemon which replaced SysV init scripts in Fedora some time ago. The systemd project provides a very flexible and powerful way to manage services. This is a really big project and all the various use cases for it make it a bit hard to understand. Luckily our deployment is very simple to implement in systemd.
 
 To be able to manage a service with systemd we need to create a service file for it. In our case a service is equal to a running container.
 
 The docker-mariadb service
+--------------------------
 
 Let’s create a docker-mariadb.service file for the database container:
 
@@ -63,6 +68,7 @@ Let’s create a docker-mariadb.service file for the database container:
 This file should be stored in the /etc/systemd/system/multi-user.target.wants/ directory.
 
 Note
+----
 
 In this example all data will be lost when you remove the mariadb container. You may want to look at various options for managing data in containers.
 Service file explained
@@ -94,12 +100,14 @@ The [Install] section defines the configuration used at service install time.
 The WantedBy parameter specifies that our service should be started when the multi-user target is reached. Since this particular target is the default, we enable our service by default.
 
 Note
+----
 
 If you want to learn more about systemd a good place to start is the systemd.service 
 and systemd.unit man pages. 
 The systemd homepage has a lot of resources too, including nice blog posts for administrators.
 
 The docker-wildfly service
+--------------------------
 
 Now we create a similar docker-wildfly.service file for the WildFly application server:
 
@@ -128,14 +136,17 @@ This file is similar to the first, but with one very important difference: the A
 If you want to run WildFly on multiple nodes, just copy the file and edit appropriate values (node name).
 
 Note
+----
 
 Although it is possible to run multiple containers from one systemd service file (hint: Type=oneshot and RemainAfterExit=true) I recommend you have one service per container. This way you’ll have better control over them.
 
 The wildfly-mariadb image
+-------------------------
 
 In the service above we used the wildfly-mariadb Docker image. The Dockerfile and instructions on how to build it are available on GitHub.
 
 Enable and run the service
+--------------------------
 
 To be able to enable or start the service, 
 systemd needs to be reloaded to pick up our new service files. 
@@ -156,6 +167,7 @@ To confirm that everything worked, run:
 Now you can point your browser to http://localhost:8080/wildfly-kitchensink/ and everything should work.
 
 Note
+----
 
 if you use systemd to start the containers on boot, it’s a good idea to disable the buit-in Docker functionaly by copying the /usr/lib/systemd/system/docker.service to /etc/systemd/system/multi-user.target.wants/docker.service and adding the following switch: --restart=false to the Docker daemon in the ExecStart line. Do not forget to reload the systemd daemon afterwards.
 Disable and remove the service
@@ -164,5 +176,6 @@ When using custom scripts (like we do) we cannot use the systemctl disable comma
     $ systemctl reset-failed
 
 Summary
+-------
 
 This was just a small introduction to the Docker and systemd world. I hope you can leverage it to run your services since it’s a pretty good choice. I should mention here the geard project which aims to do what I described above (and much, much more).
