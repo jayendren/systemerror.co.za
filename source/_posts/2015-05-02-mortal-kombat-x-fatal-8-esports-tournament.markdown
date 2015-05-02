@@ -18,4 +18,4 @@ Sonic Fox wasn’t the only one who had something to smile about at Fatal 8 eith
 
 Additionally, the ELS also notes that the hashtag ‘#Fatal8′ trended on Twitter in the United States and that there were over 2.2 million social media impressions, including one million views on Facebook. This is significant because although core Mortal Kombat fans may have tuned in – as well as undecided gamers who were yet to decide whether or not to buy MKX – these people already knew about the MK games in some respect, but the chatter on social media will have helped to get Mortal Kombat in front of a brand new, unaware audience.
 
-{% youtube AbwhiBBWfuE %}
+{% youtube AbwhiBBWfuE 640 480 %}
