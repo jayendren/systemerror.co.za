@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Mortal Kombat X Fatal 8 Tourney"
-date: 2015-10-02 10:04
+date: 2015-05-02 10:04
 comments: true
 categories: gaming
 ---
