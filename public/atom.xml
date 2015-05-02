@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[RANDOM ramblings]]></title>
+  <title><![CDATA[/dev/random]]></title>
   <link href="http://www.systemerror.co.za/atom.xml" rel="self"/>
   <link href="http://www.systemerror.co.za/"/>
-  <updated>2015-04-28T22:19:58+00:00</updated>
+  <updated>2015-05-02T13:05:58+00:00</updated>
   <id>http://www.systemerror.co.za/</id>
   <author>
     <name><![CDATA[jayendren]]></name>
@@ -14,26 +14,1173 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Mortal Kombat X Fatal 8 Tourney]]></title>
+    <link href="http://www.systemerror.co.za/blog/2015/05/02/mortal-kombat-x-fatal-8-esports-tournament/"/>
+    <updated>2015-05-02T10:04:00+00:00</updated>
+    <id>http://www.systemerror.co.za/blog/2015/05/02/mortal-kombat-x-fatal-8-esports-tournament</id>
+    <content type="html"><![CDATA[<p><img class="center" src="http://stickerish.com/wp-content/uploads/2011/09/MortalKombatWhiteSS.png" /></p>
+<blockquote><p></p><footer><strong>from</strong> <cite><a href="http://gamerant.com/mortal-kombat-x-fatal-8-esports-tournament-viewers/">gamerant.com/&hellip;</a></cite></footer></blockquote>
+
+<p>Mortal Kombat X is the fastest selling game in the Mortal Kombat franchise and the over-the-top beat ‘em up is also one of the most talked about games of the year. But developer NetherRealm Studios and publisher Warner Bros. Interactive are setting their sights even higher by looking to build a huge eSports community around the game too.</p>
+
+<p>Their first attempts to do this began last month with the ‘Fatal 8′ tournament. In partnership with the eSports League (ESL), NetherRealm and Warner Bros. invited eight of the top professional fighting game players to go head-to-head in Mortal Kombat X, three days before the game’s official release date. At ESL’s Burbank offices, the players took part in best of five with the reigning EVO Mortal Kombat 9 champion Dominique “Sonic Fox” McLean as the overall victor.</p>
+
+<p>Sonic Fox wasn’t the only one who had something to smile about at Fatal 8 either as new figures released by the ESL show that the tournament did well in terms of fan interest. According to the company, the four hour event had a peak concurrent viewership of 85,449, totalling over 200,000 hours watched. There were also Fatal 8 viewing parties in London and Paris as fans watched to see who would be crowned the winner and, no doubt, so that they could catch another glimpse of Mortal Kombat X before release day.</p>
+
+<p>Additionally, the ELS also notes that the hashtag ‘#Fatal8′ trended on Twitter in the United States and that there were over 2.2 million social media impressions, including one million views on Facebook. This is significant because although core Mortal Kombat fans may have tuned in – as well as undecided gamers who were yet to decide whether or not to buy MKX – these people already knew about the MK games in some respect, but the chatter on social media will have helped to get Mortal Kombat in front of a brand new, unaware audience.</p>
+
+<div class="embed-video-container"><iframe src="//www.youtube.com/embed/AbwhiBBWfuE 640 480" allowfullscreen=""></iframe></div>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Installing Gitlab on FreeBSD 10]]></title>
+    <link href="http://www.systemerror.co.za/blog/2015/04/30/installing-gitlab-freebsd-10/"/>
+    <updated>2015-04-30T00:32:00+00:00</updated>
+    <id>http://www.systemerror.co.za/blog/2015/04/30/installing-gitlab-freebsd-10</id>
+    <content type="html"><![CDATA[<p><img class="center" src="https://forums.freebsd.org/styles/freebsd/xenforo/freebsd_logo.png" />
+<img class="center" src="https://gitlab.com/assets/logo-white-0b53cd4ea06811d79b3acd486384e047.png" /></p>
+<blockquote><p></p><footer><strong>from</strong> <cite><a href="https://blog.assemblyco.de/installing-gitlab-on-freebsd-10">blog.assemblyco.de/&hellip;</a></cite></footer></blockquote>
+
+<h3 id="update-system">1. Update system</h3>
+
+<pre><code>pkg update  
+pkg upgrade  
+</code></pre>
+
+<h3 id="install-dependencies">2. Install dependencies</h3>
+
+<h4 id="install-system-packages">Install system packages:</h4>
+
+<pre><code>pkg install sudo bash icu cmake pkgconf git nginx ruby ruby20-gems logrotate redis postgresql94-server postfix krb5  
+</code></pre>
+
+<h4 id="install-bundler-gem-system-wide">Install bundler gem system-wide:</h4>
+
+<pre><code>gem install bundler --no-ri --no-rdoc  
+</code></pre>
+
+<p>Add this to /etc/rc.conf:</p>
+
+<pre><code># Core services
+sshd_enable="YES"  
+ntpd_enable="YES"  
+ntpd_sync_on_start="YES"
+
+# GitLab services
+redis_enable="YES"  
+postgresql_enable="YES"  
+gitlab_enable="YES"
+
+# Web server
+nginx_enable="YES"
+
+# Postfix/Sendmail
+postfix_enable="YES"  
+sendmail_enable="NO"  
+sendmail_submit_enable="NO"  
+sendmail_outbound_enable="NO"  
+sendmail_msp_queue_enable="NO"  
+</code></pre>
+
+<h3 id="create-git-user-for-gitlab">3. Create git user for GitLab</h3>
+
+<h4 id="set-up-user-and-groups">Set up user and groups:</h4>
+
+<pre><code># Create user
+pw add user -n git -m -s /usr/local/bin/bash -c "GitLab"
+
+# Add 'git' user to 'redis' group (this will come in useful later!)
+pw user mod git -G redis  
+</code></pre>
+
+<h3 id="set-up-postgres-database">4. Set up Postgres database</h3>
+
+<p>As root, make sure that Postgres is running: service postgresql restart</p>
+
+<p>Check this with service postgresql status</p>
+
+<p>Set up the database:</p>
+
+<pre><code># Log in to Postgres user account
+su - pgsql
+
+# Initialise Postgres db
+initdb /usr/local/pgsql/data
+
+# Connect to Postgres database
+psql -d template1  
+</code></pre>
+
+<p>When logged into the database:</p>
+
+<pre><code># Create a user for GitLab
+# Do not type the 'template1=#', this is part of the prompt
+template1=# CREATE USER git CREATEDB;
+
+# Create the GitLab production database &amp; grant all privileges on database
+template1=# CREATE DATABASE gitlabhq_production OWNER git;
+
+# Quit the database session
+template1=# \q  
+</code></pre>
+
+<p>Then type exit to drop back to the root user.
+Try connecting to the new database with the git user:</p>
+
+<pre><code>su - git  
+psql -d gitlabhq_production  
+</code></pre>
+
+<p>If this succeeds, quit the database session by typing \q or hitting CTRL-D.</p>
+
+<h3 id="install-and-set-up-redis">5. Install and set up Redis</h3>
+
+<p>Back up the original Redis config file:</p>
+
+<pre><code>cp /usr/local/etc/redis.conf /usr/local/etc/redis.conf.orig  
+</code></pre>
+
+<p>Run the following commands to get Redis running:</p>
+
+<pre><code># Disable Redis listening on TCP by setting 'port' to 0
+sed 's/^port .*/port 0/' /usr/local/etc/redis.conf.orig | sudo tee /usr/local/etc/redis.conf
+
+# Enable Redis socket
+echo 'unixsocket /usr/local/var/run/redis/redis.sock' | sudo tee -a /usr/local/etc/redis.conf
+
+# Grant permission to the socket to all members of the redis group
+echo 'unixsocketperm 770' | sudo tee -a /usr/local/etc/redis.conf
+
+# Create the directory which contains the socket
+mkdir -p /usr/local/var/run/redis  
+chown redis:redis /usr/local/var/run/redis  
+chmod 755 /usr/local/var/run/redis
+
+# Restart redis
+sudo service redis restart  
+</code></pre>
+
+<h3 id="install-and-set-up-gitlab">6. Install and set up GitLab</h3>
+
+<pre><code># Change to git home directory
+cd /home/git
+
+# Clone GitLab source
+sudo -u git -H git clone https://gitlab.com/gitlab-org/gitlab-ce.git -b 7-6-stable gitlab
+
+# Go to GitLab source folder
+cd /home/git/gitlab
+
+# Copy the example GitLab config
+sudo -u git -H cp config/gitlab.yml.example config/gitlab.yml  
+</code></pre>
+
+<p>Edit the GitLab configuration file (sudo -u git -H vim config/gitlab.yml):</p>
+
+<pre><code>The option host: should be set to your domain, e.g. "gitlab.mysite.com".
+The line bin_path: should be set to FreeBSD's git location: /usr/local/bin/git.
+</code></pre>
+
+<h4 id="set-up-gitab-config">6.1. Set up Gitab Config</h4>
+
+<p>As root:</p>
+
+<pre><code>cd /home/git/gitlab  
+chown -R git log/  
+chown -R git tmp/  
+chmod -R u+rwX,go-w log/  
+chmod -R u+rwX tmp/
+
+# Change back to 'git' user
+su - git  
+cd /home/git/gitlab
+
+# Make folder for satellites and set the right permissions
+mkdir /home/git/gitlab-satellites  
+chmod u+rwx,g=rx,o-rwx /home/git/gitlab-satellites
+
+# Make sure GitLab can write to the tmp/pids/ and tmp/sockets/ directories
+chmod -R u+rwX tmp/pids/  
+chmod -R u+rwX tmp/sockets/
+
+# Make sure GitLab can write to the public/uploads/ directory
+chmod -R u+rwX  public/uploads
+
+# Copy the example Unicorn config
+cp config/unicorn.rb.example config/unicorn.rb
+
+# Set the number of workers to at least the number of cores
+vim config/unicorn.rb
+
+# Copy the example Rack attack config
+cp config/initializers/rack_attack.rb.example config/initializers/rack_attack.rb
+
+# Configure Git global settings for git user, useful when editing via web
+# Edit user.email according to what is set in gitlab.yml
+git config --global user.name "GitLab"  
+git config --global user.email "example@example.com"  
+git config --global core.autocrlf input
+
+# Copy Redis connection settings
+cp config/resque.yml.example config/resque.yml
+
+# Configure Redis to use the modified socket path
+# Change 'production' line to 'unix:/usr/local/var/run/redis/redis.sock'
+vim config/resque.yml
+
+# Copy database config
+cp config/database.yml.postgresql config/database.yml
+
+# Install Ruby Gems
+bundle install --deployment --without development test mysql aws  
+</code></pre>
+
+<h3 id="gitlab-shell">7. GitLab Shell</h3>
+
+<pre><code># Run the rake task for installing gitlab-shell
+bundle exec rake gitlab:shell:install[v2.4.0] REDIS_URL=unix:/usr/local/var/run/redis/redis.sock RAILS_ENV=production
+
+# Edit the gitlab-shell config
+# Change the 'socket' option to '/usr/local/var/run/redis/redis.sock'
+# Change the 'gitlab_url' option to 'http://localhost:8080/'
+# Don't bother configuring any SSL stuff in here because it's used internally
+vim /home/git/gitlab-shell/config.yml  
+</code></pre>
+
+<h3 id="initialise-database">8. Initialise Database</h3>
+
+<pre><code>sudo -u git -H bundle exec rake gitlab:setup RAILS_ENV=production  
+# Type 'yes' to create the database tables.
+# When done you see 'Administrator account created:'
+</code></pre>
+
+<p>Note: You can set the initial Administrator password by supplying it in the environment variable GITLAB_ROOT_PASSWORD as seen below. If you don&#8217;t set the password (and it is set to the default one) please don&#8217;t expose GitLab to the public internet until the installation is complete and you have changed the default password.</p>
+
+<pre><code>sudo -u git -H bundle exec rake gitlab:setup RAILS_ENV=production GITLAB_ROOT_PASSWORD=yourpassword  
+</code></pre>
+
+<h3 id="init-script">9. Init script</h3>
+
+<p>As root:</p>
+
+<pre><code>cp /home/git/gitlab/lib/support/init.d/gitlab /usr/local/etc/rc.d/gitlab  
+</code></pre>
+
+<h3 id="check-configuration-and-compile-assets">10. Check Configuration and Compile Assets</h3>
+
+<pre><code>cd /home/git/gitlab  
+su - git  
+bundle exec rake gitlab:env:info RAILS_ENV=production  
+</code></pre>
+
+<p>If this all passes (all green and/or no errors are reported), then go ahead and compile all of the assets for GitLab. This can take ~10-15 minutes on a smaller machine, so don&#8217;t panic if it takes a while!</p>
+
+<pre><code>bundle exec rake assets:precompile RAILS_ENV=production  
+</code></pre>
+
+<h3 id="start-gitlab-service">11. Start GitLab service</h3>
+
+<p>If all of the above steps complete with no errors and everything has gone
+smoothly, then start the GitLab service.</p>
+
+<p>As root:</p>
+
+<pre><code>service gitlab start  
+</code></pre>
+
+<h3 id="nginx">12. Nginx</h3>
+
+<p>The officially supported web server in GitLab is nginx - and GitLab provide
+an nginx configuration file in /home/git/gitlab/lib/support/nginx/gitlab,
+so you can copy that if you prefer, and modify their template.</p>
+
+<p>I didn&#8217;t want to do that, so this is the configuration I used:</p>
+
+<pre><code>server {  
+    server_name yourserver.yourdomain;
+    server_tokens off;
+
+    listen 80 default accept_filter=httpready;
+
+    # Uncomment if you want to use SSL
+    # listen 443 ssl;
+
+    # Configure your SSL certificate locations here
+    # ssl_certificate        /usr/local/etc/nginx/ssl/gitlab/ssl-bundle.crt;
+    # ssl_certificate_key  /usr/local/etc/nginx/ssl/gitlab/gitlab.key;
+
+    # Uncomment to force SSL connections
+    # if ($ssl_protocol = "") {
+    #    rewrite ^   https://$server_name$request_uri? permanent;
+    # }
+
+    location / {
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   Host      $http_host;
+        proxy_pass         http://127.0.0.1:8080;
+    }
+}
+</code></pre>
+
+<p>Restart nginx with sudo service nginx restart, and you should be up and
+running.</p>
+
+<p>Check everything with this command just to be sure:</p>
+
+<pre><code>su - git  
+cd /home/git/gitlab
+
+bundle exec rake gitlab:check RAILS_ENV=production  
+</code></pre>
+
+<p>Good to Go</p>
+
+<p>If everything comes up green, then GitLab should work.</p>
+
+<p>If some things show up as red, blue, pink or any colour that&#8217;s not green - read any error messages thoroughly before trying any suggested fixes. Google comes in extremely handy when trying to diagnose unhelpful Ruby error messages.</p>
+
+<h3 id="troubleshooting">Troubleshooting</h3>
+
+<h4 id="gateway-timed-out-errors">504 - Gateway Timed Out errors</h4>
+
+<p>This can be caused by several different things with GitLab. The best bet is to go back up through the install guide and check each step has been properly executed.</p>
+
+<pre><code>Check the logs! Look in /home/git/gitlab/log for clues.
+Check what's running! The command sockstat -4l usually gives an idea of which services are running on which ports. (Redis uses port 6379, Unicorn uses port 8080, and Postgres uses port 5432).
+</code></pre>
+
+<p>What it usually boils down to:</p>
+
+<pre><code>GitLab's assets haven't been precompiled (there is a command above)
+Postgres isn't running or the database isn't set up properly
+Redis isn't running
+Nginx isn't set up properly
+</code></pre>
+
+<h4 id="gem-timfel-krb5-auth-fails-to-build">Gem timfel-krb5-auth fails to build</h4>
+
+<p>Install the Kerberos package: pkg install krb5. As far as I know, there&#8217;s no way to disable the Kerberos authentication in GitLab (even if it&#8217;s unused) so unfortunately the only solution is to install the missing packages.</p>
+
+<p>[edit: newer versions of GitLab (7.8 and upwards) depend on the krb5-111 package instead of krb5 - so if you&#8217;re installing a newer version of GitLab, run: pkg install krb5-111]
+Postfix/sendmail: &#8220;postdrop: warning: unable to look up public/pickup: No such file or directory&#8221;</p>
+
+<p>Sometimes Postfix and/or sendmail might complain if they&#8217;re not set up
+correctly or have only just been installed.</p>
+
+<pre><code>mkfifo /var/spool/postfix/public/pickup  
+killall $(pgrep sendmail) # Kill all sendmail processes  
+sudo service postfix restart # Restart Postfix  
+</code></pre>
+
+<p>http://www.databasically.com/2009/12/02/ubuntu-postfix-error-postdrop-warning-unable-to-look-up-publicpickup-no-such-file-or-directory/</p>
+
+<h4 id="unicorn--nginx-failed-to-set-acceptfilterhttpready">Unicorn / nginx: &#8220;Failed to set accept_filter=httpready&#8221;</h4>
+
+<p>This is to do with an HTTP buffering kernel module in FreeBSD that some HTTP
+servers expect to be loaded. Run this:</p>
+
+<pre><code>kldload accf_http  
+echo 'accf_http_load="YES"' &gt;&gt; /boot/loader.conf
+
+sudo service gitlab restart  
+sudo service redis restart  
+sudo service nginx restart  
+</code></pre>
+
+<p>http://www.cyberciti.biz/faq/failed-to-enable-the-httpready-accept-filter/</p>
+
+<h3 id="references">References</h3>
+
+<pre><code>https://blog.assemblyco.de/installing-gitlab-on-freebsd-10
+https://github.com/gitlabhq/gitlabhq/blob/7-6-stable/doc/install/installation.md
+http://www.luizgustavo.pro.br/blog/2014/08/21/instalacao-gitlab-no-freebsd/
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Running Docker Containers as Systemd Services]]></title>
+    <link href="http://www.systemerror.co.za/blog/2015/04/29/Docker-containers-with-systemd/"/>
+    <updated>2015-04-29T20:28:00+00:00</updated>
+    <id>http://www.systemerror.co.za/blog/2015/04/29/Docker-containers-with-systemd</id>
+    <content type="html"><![CDATA[<p><img class="center" src="https://d3oypxn00j2a10.cloudfront.net/0.17.3/images/pages/brand_guidelines/small_h-dark.png" /></p>
+<blockquote><p></p><footer><strong>from</strong> <cite><a href="https://goldmann.pl/blog/2014/07/30/running-docker-containers-as-systemd-services/">goldmann.pl/blog/2014/07/30/&hellip;</a></cite></footer></blockquote>
+
+<p>Starting and stopping Docker containers is easy with the docker run and docker {stop|kill} commands. 
+By default, when the Docker daemon is restarted, running containers are also restarted. 
+This is a great feature but sometimes you need more control over the container’s lifecycle.</p>
+
+<p>Imagine having a container which is linked to another one. Docker does not provide any way of specifying which container should be started when or what to do if a container dies.</p>
+
+<h2 id="deployment-scenario">Deployment scenario</h2>
+
+<p>Consider this pretty simple deployment:</p>
+
+<h2 id="deployment-example">Deployment example</h2>
+
+<p><img src="https://goldmann.pl/images/systemd_deployment.png" /></p>
+
+<p>When we start such a deployment we need to ensure that the database is started first, so we can later link it to the WildFly node.</p>
+
+<h2 id="note">Note</h2>
+
+<p>The load balancer set up is not part of this guide, but is shown (along with another WildFly node) using a dotted outline. The mod_cluster project may be a good choice for a load balancer.
+We’ll use following images to power this setup:</p>
+
+<p>fedora/mariadb for the the database a custom image based on jboss/wildfly to run the node</p>
+
+<h2 id="systemd-to-the-rescue">systemd to the rescue</h2>
+
+<p>Systemd is a system management daemon which replaced SysV init scripts in Fedora some time ago. The systemd project provides a very flexible and powerful way to manage services. This is a really big project and all the various use cases for it make it a bit hard to understand. Luckily our deployment is very simple to implement in systemd.</p>
+
+<p>To be able to manage a service with systemd we need to create a service file for it. In our case a service is equal to a running container.</p>
+
+<h2 id="the-docker-mariadb-service">The docker-mariadb service</h2>
+
+<p>Let’s create a docker-mariadb.service file for the database container:</p>
+
+<pre><code>[Unit]
+Description=MariaDB database
+Requires=docker.service
+After=docker.service
+
+[Service]
+User=goldmann
+Restart=on-failure
+RestartSec=10
+ExecStartPre=-/usr/bin/docker kill mariadb
+ExecStartPre=-/usr/bin/docker rm mariadb
+ExecStart=/usr/bin/docker run --name=mariadb fedora/mariadb
+ExecStop=-/usr/bin/docker stop mariadb
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+
+<p>This file should be stored in the /etc/systemd/system/multi-user.target.wants/ directory.</p>
+
+<h2 id="note-1">Note</h2>
+
+<p>In this example all data will be lost when you remove the mariadb container. You may want to look at various options for managing data in containers.
+Service file explained
+Let’s now go through the docker-mariadb.service file:</p>
+
+<p>The [Unit] section contains information about the service itself. Here you can find the Description which will be visible almost everywhere (try systemctl list-units).</p>
+
+<p>The Requires parameter specifies which service should be activated and marked to be started before our service. In our case (if we want to start/enable the docker-mariadb.service) the docker.service service will be started/enabled too.</p>
+
+<p>The After parameter configures the ordering of services. In our case the docker-mariadb.service will wait for the docker.service to start and only then will it be started. If we don’t provide the After parameter, our service would be started in parallel with the docker.service. This could trigger some issues because there is some chance that the Docker service would be not fully started, when we try to run the container.</p>
+
+<p>The [Service] section defines the actual service.</p>
+
+<p>The User parameter specifies the user that will be used to execute the command. This is optional but it’s a good idea to keep user privileges as minimal as possible.</p>
+
+<p>The Restart parameter specifies when the service should be restarted. The on-failure value means that the service will be restarted when the service is terminated in an unclean way. The RestartSec parameter specifies how long we should wait before we try to restart the service.</p>
+
+<p>The Environment parameter is useful to set environment variables for the processes that will be started. 
+I use it to lower the memory requirements of the JVM for WildFly (see below).</p>
+
+<p>The ExecStartPre parameters specify which command should be run before we start the main process. I use it to clean up (stop and remove) containers. Please note the minus sign just before the command. This tells systemd to not fail the boot even if the command fails.</p>
+
+<p>The ExecStart parameter is the heart of the service. Here we define what should be started to run our service.</p>
+
+<p>The ExecStop parameter is similar to ExecStart, but will run if we want to stop the service.</p>
+
+<p>The [Install] section defines the configuration used at service install time.</p>
+
+<p>The WantedBy parameter specifies that our service should be started when the multi-user target is reached. Since this particular target is the default, we enable our service by default.</p>
+
+<h2 id="note-2">Note</h2>
+
+<p>If you want to learn more about systemd a good place to start is the systemd.service 
+and systemd.unit man pages. 
+The systemd homepage has a lot of resources too, including nice blog posts for administrators.</p>
+
+<h2 id="the-docker-wildfly-service">The docker-wildfly service</h2>
+
+<p>Now we create a similar docker-wildfly.service file for the WildFly application server:</p>
+
+<pre><code>[Unit]
+Description=WildFly node
+Requires=docker-mariadb.service
+After=docker-mariadb.service
+
+[Service]
+User=goldmann
+Restart=on-failure
+RestartSec=10
+Environment="JAVA_OPTS=-Xms64m -Xmx512m"
+ExecStartPre=-/usr/bin/docker kill wildfly-mariadb
+ExecStartPre=-/usr/bin/docker rm wildfly-mariadb
+ExecStart=/usr/bin/docker run --name wildfly --link mariadb:mariadb -p 8080:8080 wildfly-mariadb
+ExecStop=-/usr/bin/docker stop wildfly-mariadb
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+
+<p>Again, place it in the /etc/systemd/system/multi-user.target.wants/ directory.</p>
+
+<p>This file is similar to the first, but with one very important difference: the After and Requires parameters specify the docker-mariadb service. This is because we want to boot WildFly after the MariaDB database.</p>
+
+<p>If you want to run WildFly on multiple nodes, just copy the file and edit appropriate values (node name).</p>
+
+<h2 id="note-3">Note</h2>
+
+<p>Although it is possible to run multiple containers from one systemd service file (hint: Type=oneshot and RemainAfterExit=true) I recommend you have one service per container. This way you’ll have better control over them.</p>
+
+<h2 id="the-wildfly-mariadb-image">The wildfly-mariadb image</h2>
+
+<p>In the service above we used the wildfly-mariadb Docker image. The Dockerfile and instructions on how to build it are available on GitHub.</p>
+
+<h2 id="enable-and-run-the-service">Enable and run the service</h2>
+
+<p>To be able to enable or start the service, 
+systemd needs to be reloaded to pick up our new service files. 
+Run:</p>
+
+<pre><code>$ systemctl daemon-reload
+</code></pre>
+
+<p>This command will also mark our service to be started on boot (remember the WantedBy parameters?). 
+Now we can start our application:</p>
+
+<pre><code>$ systemctl start docker-wildfly
+</code></pre>
+
+<p>To confirm that everything worked, run:</p>
+
+<pre><code>$ systemctl status docker-wildfly
+$ docker ps
+</code></pre>
+
+<p>Now you can point your browser to http://localhost:8080/wildfly-kitchensink/ and everything should work.</p>
+
+<h2 id="note-4">Note</h2>
+
+<p>if you use systemd to start the containers on boot, it’s a good idea to disable the buit-in Docker functionaly by copying the /usr/lib/systemd/system/docker.service to /etc/systemd/system/multi-user.target.wants/docker.service and adding the following switch: –restart=false to the Docker daemon in the ExecStart line. Do not forget to reload the systemd daemon afterwards.
+Disable and remove the service
+When using custom scripts (like we do) we cannot use the systemctl disable commands (this is by systemd design — if you want know more please read this comment). In our case we need to remove (or rename) the docker-*.service files and then run:</p>
+
+<pre><code>$ systemctl reset-failed
+</code></pre>
+
+<h2 id="summary">Summary</h2>
+
+<p>This was just a small introduction to the Docker and systemd world. I hope you can leverage it to run your services since it’s a pretty good choice. I should mention here the geard project which aims to do what I described above (and much, much more).</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Nagios XMPP + SOI Integration]]></title>
+    <link href="http://www.systemerror.co.za/blog/2015/04/29/nagios-soi-xmpp-integration/"/>
+    <updated>2015-04-29T20:26:00+00:00</updated>
+    <id>http://www.systemerror.co.za/blog/2015/04/29/nagios-soi-xmpp-integration</id>
+    <content type="html"><![CDATA[<p><img class="center" src="http://assets.nagios.com/images/header/Nagios.png" /></p>
+
+<h3 id="about">About:</h3>
+
+<p>Ruby daemon to post nagios alerts to CA SOI.
+Implementation spawned from Traiano&#8217;s perl/xmpp nagbot
+and performs xmpp posts to a chat room</p>
+
+<h3 id="requirements">Requirements:</h3>
+
+<h4 id="ruby">Ruby:</h4>
+
+<ul>
+  <li>Ruby187</li>
+  <li>rubygems</li>
+  <li>logger</li>
+  <li>uri</li>
+  <li>net/https</li>
+  <li>facter</li>
+</ul>
+
+<h4 id="perl">Perl:</h4>
+
+<ul>
+  <li>sendxmpp - http://www.djcbsoftware.nl/code/sendxmpp</li>
+</ul>
+
+<h4 id="nagios">Nagios:</h4>
+
+<ul>
+  <li>nagios server needs to be configured to write alerts to a named pipe/fifo in:</li>
+  <li>
+    <p>nagios/etc/check_commands.cfg:</p>
+
+    <p><code>define command {  
+     command_name notify-service-by-fifo 
+     command_line /bin/echo "$HOSTNAME$ $NOTIFICATIONTYPE$ $SERVICEOUTPUT$ $SERVICEDESC$ $SERVICESTATE$ $LONGDATETIME$" &gt; /var/spool/nagios/rw/ndbot.fifo
+}</code></p>
+
+    <p><code>define command {  
+     command_name                    notify-host-by-fifo
+     command_line                    /bin/echo "$HOSTNAME$ $NOTIFICATIONTYPE$ $HOSTADDRESS$ $HOSTSTATE$ $HOSTOUTPUT$ $LONGDATETIME$" &gt; /var/spool/nagios/rw/ndbot.fifo
+}</code></p>
+  </li>
+  <li>
+    <p>nagios/etc/nagios.cfg:</p>
+
+    <p><code>global_host_event_handler=notify-host-by-fifo</code>
+<code>global_service_event_handler=notify-service-by-fifo</code></p>
+  </li>
+  <li>
+    <p>Create the fifo with:</p>
+
+    <p><code>mkfifo /var/spool/nagios/rw/ndbot.fifo</code></p>
+  </li>
+</ul>
+
+<h4 id="freebsd">FreeBSD:</h4>
+
+<ul>
+  <li>Copy of the rc_nagbot_soi script as:
+<code>/usr/local/etc/rc.d/nagbot_soi</code>
+with executable permissions</li>
+  <li>/etc/rc.conf entry:
+<code>nagbot_soi_enable="YES"</code></li>
+  <li>Copy of the ruby daemon (nagbot_soi.rb) as:
+<code>/usr/local/sbin/nagbot_soi.rb</code></li>
+</ul>
+
+<h4 id="soi">SOI:</h4>
+
+<ul>
+  <li>Example post (dev environment):
+<code>http://soi.lab/Soi/default.aspx?insid=win123001&amp;sitmsg=cpu1&amp;sev=4&amp;alarm=54256</code></li>
+  <li>Definitions:
+    <ul>
+      <li>insid  : configuration item (maps to fqdn)</li>
+      <li>sitmsg : situation message (maps to alert message)</li>
+      <li>sev    : alert serverity
+        <ul>
+          <li>Normal   = 0</li>
+          <li>Minor    = 1</li>
+          <li>Major    = 2</li>
+          <li>Critical = 3</li>
+          <li>Down     = 4</li>
+        </ul>
+      </li>
+      <li>alarm  : silo alarm id (unique 5 digit integer)</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="implementation-workflow">Implementation Workflow:</h3>
+
+<ol>
+  <li>
+    <p>The daemon reads the named pipe and stores raw form of the data written to the pipe in the @alert variable, e.g:
+  <code>ramc01.ops.lan  WARNING - load average: 8.39, 7.46, 5.81 server-NRPE-load WARNING Wed Jan 15 12:45:32 SAST 2014</code></p>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>Matches OK</td>
+          <td>UP</td>
+          <td>WARN</td>
+          <td>CRIT</td>
+          <td>DOWN:</td>
+        </tr>
+      </tbody>
+    </table>
+    <ul>
+      <li>
+        <table>
+          <tbody>
+            <tr>
+              <td>if @alert.match /OK</td>
+              <td>UP/ @state = 0</td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+      <li>if @alert.match /WARN/ @state  = 1</li>
+      <li>if @alert.match /CRIT/ @state  = 3</li>
+      <li>if @alert.match /DOWN/ @state  = 4</li>
+    </ul>
+  </li>
+  <li>
+    <p>Converts the alert to an array (\s seperator), e.g:
+  <code>["ramc01.ops.lan", "WARNING", "-", "load", "average:", "8.39,", "7.46,", "5.81", "server-NRPE-load", "WARNING", "Wed", "Jan", "15", "12:45:32", "SAST", "2014"]</code></p>
+  </li>
+  <li>Extracts the following from the array:
+    <ul>
+      <li>@ci       = first element of @data array, e.g:
+  <code>ramc01.ops.lan</code></li>
+      <li>@sitmsg   = remaining elements from @data array to build the alert message, with URI encoding, e.g:
+  <code>WARNING%20-%20load%20average:%208.39%20%207.46%20%205.81%20server-NRPE-load%20WARNING%20Wed%20Jan%2015%2012:45:32%20SAST%202014</code></li>
+      <li>@alarm    = unique 5 digit number, needs to be identical when @state moves from 3 to 0 (critical to ok)</li>
+      <li>returns the date, e.g: 26 Feb 2014 = 26022104</li>
+      <li>returns the alert(data) in bytes</li>
+      <li>returns the data from the check in bytes</li>
+      <li>returns the alarm by adding the (date + alert) * check</li>
+      <li>e.g:</li>
+      <li>alert: remedy-ar01.ops.lan  PROCS WARNING: 7 processes with command name sendmail: check_remedy_arsystem_sendmail WARNING Wed Feb 26 15:42:22 SAST 2014</li>
+      <li>data : 114101109101100121459711448494611111211546109116110981171151051101011151154699111461229780827967838765827873787158551121141119910111511510111511910511610499111109109971101001109710910111510111010010997105108589910410199107951141011091011001219597114115121115116101109951151011101001099710510887658278737871871011007010198505449535852505850508365838450484952</li>
+      <li>check: 9511410110910110012195971141151211151161011099511510111010010997105108</li>
+      <li>alarm: 10852</li>
+      <li>alert: remedy-ar01.ops.lan  PROCS OK: 3 processes with command name sendmail: check_remedy_arsystem_sendmail OK Wed Feb 26 15:44:22 SAST 2014</li>
+      <li>data : 1141011091011001214597114484946111112115461091161109811711510511010111511546991114612297808279678379755851112114111991011151151011151191051161049911110910997110100110971091011151011101001099710510858991041019910795114101109101100121959711411512111511610110995115101110100109971051087975871011007010198505449535852525850508365838450484952</li>
+      <li>check: 9511410110910110012195971141151211151161011099511510111010010997105108</li>
+      <li>alarm: 10852</li>
+    </ul>
+  </li>
+</ol>
+
+<ul>
+  <li>@soi_post = cummulation of the extracted data to post - e.g:
+   <code>http://soi.lan/Soi/default.aspx?insid=ramc01.ops.lan&amp;sitmsg=WARNING%20-%20load%20average:%208.39%20%207.46%20%205.81%20server-NRPE-load%20WARNING%20Wed%20Jan%2015%2012:45:32%20SAST%202014&amp;sev=3&amp;alarm=40363</code></li>
+</ul>
+
+<ol>
+  <li>
+    <p>Posts the alert to the SOI server</p>
+  </li>
+  <li>
+    <p>Posts the alert to xmpp chat-room</p>
+  </li>
+</ol>
+
+<h3 id="global-variables">Global variables:</h3>
+
+<pre><code>@nagios_fifo = "/var/spool/nagios/rw/ndbot.fifo"         # path to nagios named pipe
+@log         = "/var/spool/nagios/nagbot_soi.log"        # path to logfile for this daemon
+@log_size    = 1024000                                   # logfile size in kb
+@logger      = Logger.new(@log, @log_size)               # logger instance
+@soi_prot    = "http"                                    # http or https
+@soi_host    = "soi.lan"                                 # ipv4/fqdn
+@soi_api     = "Soi/default.aspx?"                       # api 
+@soi_url     = "#{@soi_prot}://#{@soi_host}/#{@soi_api}" # soi url to post
+@soi_timeout = 600                                       # number of seconds after to wait before giving up
+@soi_retries = 5                                         # number of times to retry posting before giving up
+@host_no     = Facter.value('fqdn').split(/\./)[0].split(/0/)[1] # return server number, e.g nagios01.noc =&gt; 1
+@xmpp_pass   = "passwd"                                  # xmpp password
+@xmpp_host   = "openfire01.ops.lan:5222"                 # xmpp host:port
+@xmpp_room   = "noise\@chat.int.lan"                     # xmpp chat room
+@xmpp_cmd    = " | sendxmpp -i -s 'nagios xmpp alert' -d -v -u nagbot-00#{@host_no} -p '#{@xmpp_pass}' -j #{@xmpp_host} -c #{@xmpp_room} -r nagbot-00#{@host_no}"  # send xmpp alert to chat
+</code></pre>
+
+<h3 id="troubleshooting">Troubleshooting:</h3>
+
+<ul>
+  <li>Start the daemon:
+<code>/usr/local/etc/rc.d/nagbot_soi start</code></li>
+  <li>In a seperate console, watch the logfile: 
+<code>tail -f /var/spool/nagios/nagbot_soi.log</code></li>
+  <li>Check if it&#8217;s running: 
+<code>[root@nagios03 ~/soi]# ps aux|grep nagbot_soi
+root    90076  0.0  0.1 29712  9332   0  I     4:13PM   0:00.01 /usr/local/bin/ruby /usr/local/sbin/nagbot_soi.rb</code></li>
+  <li>Confirm if it&#8217;s sending http data, run tcpdump on the  server: 
+<code>tcpdump -nXvvs 0 host 10.217.213.55 and port 80</code></li>
+  <li>You should see packets going out if you send a test alert directly to the fifo named pipe: 
+<code>echo "this is a CRIT message" &gt; /var/spool/nagios/rw/ndbot.fifo</code></li>
+  <li>If are no packets, it&#8217;s intermediary ACLs.</li>
+  <li>If you do see packets outgoing but no responses inbound, confirm firewall rules.</li>
+  <li>If you see responses going out, confirm that there are no issues with the SOI host</li>
+  <li>For XMPP -
+    <ul>
+      <li>If all seems well at the network level but you&#8217;re not seeing any data in the actual jabber channel, check the bot and you are in the same channel.</li>
+      <li>Remember that if the bot joins the &#8216;wrong&#8217; channel, that channel would be auto created into existence.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="highlighter-coderay"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre><a href="#n1" name="n1">1</a>
+<a href="#n2" name="n2">2</a>
+<a href="#n3" name="n3">3</a>
+<a href="#n4" name="n4">4</a>
+<a href="#n5" name="n5">5</a>
+<a href="#n6" name="n6">6</a>
+<a href="#n7" name="n7">7</a>
+<a href="#n8" name="n8">8</a>
+<a href="#n9" name="n9">9</a>
+<strong><a href="#n10" name="n10">10</a></strong>
+<a href="#n11" name="n11">11</a>
+<a href="#n12" name="n12">12</a>
+<a href="#n13" name="n13">13</a>
+<a href="#n14" name="n14">14</a>
+<a href="#n15" name="n15">15</a>
+<a href="#n16" name="n16">16</a>
+<a href="#n17" name="n17">17</a>
+<a href="#n18" name="n18">18</a>
+<a href="#n19" name="n19">19</a>
+<strong><a href="#n20" name="n20">20</a></strong>
+<a href="#n21" name="n21">21</a>
+<a href="#n22" name="n22">22</a>
+<a href="#n23" name="n23">23</a>
+<a href="#n24" name="n24">24</a>
+<a href="#n25" name="n25">25</a>
+<a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
+<a href="#n31" name="n31">31</a>
+<a href="#n32" name="n32">32</a>
+<a href="#n33" name="n33">33</a>
+<a href="#n34" name="n34">34</a>
+<a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
+<a href="#n42" name="n42">42</a>
+<a href="#n43" name="n43">43</a>
+<a href="#n44" name="n44">44</a>
+<a href="#n45" name="n45">45</a>
+<a href="#n46" name="n46">46</a>
+<a href="#n47" name="n47">47</a>
+<a href="#n48" name="n48">48</a>
+<a href="#n49" name="n49">49</a>
+<strong><a href="#n50" name="n50">50</a></strong>
+<a href="#n51" name="n51">51</a>
+<a href="#n52" name="n52">52</a>
+<a href="#n53" name="n53">53</a>
+<a href="#n54" name="n54">54</a>
+<a href="#n55" name="n55">55</a>
+<a href="#n56" name="n56">56</a>
+<a href="#n57" name="n57">57</a>
+<a href="#n58" name="n58">58</a>
+<a href="#n59" name="n59">59</a>
+<strong><a href="#n60" name="n60">60</a></strong>
+<a href="#n61" name="n61">61</a>
+<a href="#n62" name="n62">62</a>
+<a href="#n63" name="n63">63</a>
+<a href="#n64" name="n64">64</a>
+<a href="#n65" name="n65">65</a>
+<a href="#n66" name="n66">66</a>
+<a href="#n67" name="n67">67</a>
+<a href="#n68" name="n68">68</a>
+<a href="#n69" name="n69">69</a>
+<strong><a href="#n70" name="n70">70</a></strong>
+<a href="#n71" name="n71">71</a>
+<a href="#n72" name="n72">72</a>
+<a href="#n73" name="n73">73</a>
+<a href="#n74" name="n74">74</a>
+<a href="#n75" name="n75">75</a>
+<a href="#n76" name="n76">76</a>
+<a href="#n77" name="n77">77</a>
+<a href="#n78" name="n78">78</a>
+<a href="#n79" name="n79">79</a>
+<strong><a href="#n80" name="n80">80</a></strong>
+<a href="#n81" name="n81">81</a>
+<a href="#n82" name="n82">82</a>
+<a href="#n83" name="n83">83</a>
+<a href="#n84" name="n84">84</a>
+<a href="#n85" name="n85">85</a>
+<a href="#n86" name="n86">86</a>
+<a href="#n87" name="n87">87</a>
+<a href="#n88" name="n88">88</a>
+<a href="#n89" name="n89">89</a>
+<strong><a href="#n90" name="n90">90</a></strong>
+<a href="#n91" name="n91">91</a>
+<a href="#n92" name="n92">92</a>
+<a href="#n93" name="n93">93</a>
+<a href="#n94" name="n94">94</a>
+<a href="#n95" name="n95">95</a>
+<a href="#n96" name="n96">96</a>
+<a href="#n97" name="n97">97</a>
+<a href="#n98" name="n98">98</a>
+<a href="#n99" name="n99">99</a>
+<strong><a href="#n100" name="n100">100</a></strong>
+<a href="#n101" name="n101">101</a>
+<a href="#n102" name="n102">102</a>
+<a href="#n103" name="n103">103</a>
+<a href="#n104" name="n104">104</a>
+<a href="#n105" name="n105">105</a>
+<a href="#n106" name="n106">106</a>
+<a href="#n107" name="n107">107</a>
+<a href="#n108" name="n108">108</a>
+<a href="#n109" name="n109">109</a>
+<strong><a href="#n110" name="n110">110</a></strong>
+<a href="#n111" name="n111">111</a>
+<a href="#n112" name="n112">112</a>
+<a href="#n113" name="n113">113</a>
+<a href="#n114" name="n114">114</a>
+<a href="#n115" name="n115">115</a>
+<a href="#n116" name="n116">116</a>
+<a href="#n117" name="n117">117</a>
+<a href="#n118" name="n118">118</a>
+<a href="#n119" name="n119">119</a>
+<strong><a href="#n120" name="n120">120</a></strong>
+<a href="#n121" name="n121">121</a>
+<a href="#n122" name="n122">122</a>
+<a href="#n123" name="n123">123</a>
+<a href="#n124" name="n124">124</a>
+<a href="#n125" name="n125">125</a>
+<a href="#n126" name="n126">126</a>
+<a href="#n127" name="n127">127</a>
+<a href="#n128" name="n128">128</a>
+<a href="#n129" name="n129">129</a>
+<strong><a href="#n130" name="n130">130</a></strong>
+<a href="#n131" name="n131">131</a>
+<a href="#n132" name="n132">132</a>
+<a href="#n133" name="n133">133</a>
+<a href="#n134" name="n134">134</a>
+<a href="#n135" name="n135">135</a>
+<a href="#n136" name="n136">136</a>
+<a href="#n137" name="n137">137</a>
+<a href="#n138" name="n138">138</a>
+<a href="#n139" name="n139">139</a>
+<strong><a href="#n140" name="n140">140</a></strong>
+<a href="#n141" name="n141">141</a>
+<a href="#n142" name="n142">142</a>
+<a href="#n143" name="n143">143</a>
+<a href="#n144" name="n144">144</a>
+<a href="#n145" name="n145">145</a>
+<a href="#n146" name="n146">146</a>
+<a href="#n147" name="n147">147</a>
+<a href="#n148" name="n148">148</a>
+<a href="#n149" name="n149">149</a>
+<strong><a href="#n150" name="n150">150</a></strong>
+<a href="#n151" name="n151">151</a>
+</pre></td>
+  <td class="code"><pre>require <span class="string"><span class="delimiter">'</span><span class="content">rubygems</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">logger</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">uri</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">net/https</span><span class="delimiter">'</span></span>
+require <span class="string"><span class="delimiter">'</span><span class="content">facter</span><span class="delimiter">'</span></span>
+
+<span class="comment"># global variables</span>
+<span class="comment"># nagios</span>
+<span class="instance-variable">@nagios_fifo</span> = <span class="string"><span class="delimiter">&quot;</span><span class="content">/var/spool/nagios/rw/ndbot.fifo</span><span class="delimiter">&quot;</span></span>         <span class="comment"># path to nagios named pipe</span>
+<span class="instance-variable">@log</span>         = <span class="string"><span class="delimiter">&quot;</span><span class="content">/var/spool/nagios/nagbot_soi.log</span><span class="delimiter">&quot;</span></span>        <span class="comment"># path to logfile for this daemon</span>
+<span class="instance-variable">@log_size</span>    = <span class="integer">1024000</span>                                   <span class="comment"># logfile size in kb</span>
+<span class="instance-variable">@logger</span>      = <span class="constant">Logger</span>.new(<span class="instance-variable">@log</span>, <span class="instance-variable">@log_size</span>)               <span class="comment"># logger instance</span>
+<span class="comment"># soi</span>
+<span class="instance-variable">@soi_prot</span>    = <span class="string"><span class="delimiter">&quot;</span><span class="content">http</span><span class="delimiter">&quot;</span></span>                                    <span class="comment"># http or https</span>
+<span class="instance-variable">@soi_host</span>    = <span class="string"><span class="delimiter">&quot;</span><span class="content">soi.lan</span><span class="delimiter">&quot;</span></span>                                 <span class="comment"># ipv4/fqdn</span>
+<span class="instance-variable">@soi_api</span>     = <span class="string"><span class="delimiter">&quot;</span><span class="content">Soi/default.aspx?</span><span class="delimiter">&quot;</span></span>                       <span class="comment"># api </span>
+<span class="instance-variable">@soi_url</span>     = <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@soi_prot</span><span class="inline-delimiter">}</span></span><span class="content">://</span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@soi_host</span><span class="inline-delimiter">}</span></span><span class="content">/</span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@soi_api</span><span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span> <span class="comment"># soi url to post</span>
+<span class="instance-variable">@soi_timeout</span> = <span class="integer">600</span>                                       <span class="comment"># number of seconds after to wait before giving up</span>
+<span class="instance-variable">@soi_retries</span> = <span class="integer">5</span>                                         <span class="comment"># number of times to retry posting before giving up</span>
+<span class="comment"># xmpp</span>
+<span class="instance-variable">@fqdn</span>        = <span class="constant">Facter</span>.value(<span class="string"><span class="delimiter">'</span><span class="content">fqdn</span><span class="delimiter">'</span></span>)
+<span class="instance-variable">@xmpp_pass</span>   = <span class="string"><span class="delimiter">&quot;</span><span class="content">passwd</span><span class="delimiter">&quot;</span></span>                                   <span class="comment"># xmpp password</span>
+<span class="instance-variable">@xmpp_host</span>   = <span class="string"><span class="delimiter">&quot;</span><span class="content">openfire01.ops.lan</span><span class="char">\:</span><span class="content">5222</span><span class="delimiter">&quot;</span></span>                 <span class="comment"># xmpp host:port</span>
+<span class="instance-variable">@xmpp_room</span>   = <span class="string"><span class="delimiter">&quot;</span><span class="content">noise</span><span class="char">\@</span><span class="content">chat.int.lan</span><span class="delimiter">&quot;</span></span>                      <span class="comment"># xmpp chat room</span>
+<span class="instance-variable">@xmpp_cmd</span>    = <span class="string"><span class="delimiter">&quot;</span><span class="content"> | sendxmpp -i -s 'nagios xmpp alert' -d -v -u nagbot-00</span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@host_no</span><span class="inline-delimiter">}</span></span><span class="content"> -p '</span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@xmpp_pass</span><span class="inline-delimiter">}</span></span><span class="content">' -j </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@xmpp_host</span><span class="inline-delimiter">}</span></span><span class="content"> -c </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@xmpp_room</span><span class="inline-delimiter">}</span></span><span class="content"> -r nagbot-00</span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@host_no</span><span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>  <span class="comment"># send xmpp alert to chat</span>
+<span class="comment"># mail</span>
+<span class="instance-variable">@mail_rcpt</span>   = <span class="string"><span class="delimiter">&quot;</span><span class="content">sysadmin@lan</span><span class="delimiter">&quot;</span></span>
+<span class="instance-variable">@mail_cmd</span>    = <span class="string"><span class="delimiter">&quot;</span><span class="content"> | mail -s 'nagbot_soi_error: </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@fqdn</span><span class="inline-delimiter">}</span></span><span class="content">' </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@mail_rcpt</span><span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+
+<span class="comment"># net/http post def</span>
+<span class="keyword">def</span> <span class="function">nagbot_soi_post</span>(url)
+
+  <span class="keyword">begin</span>
+    uri                = <span class="constant">URI</span>.parse(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span>url<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>)
+    http               = <span class="constant">Net</span>::<span class="constant">HTTP</span>.new(uri.host, uri.port)
+    http.read_timeout  = <span class="instance-variable">@soi_timeout</span>
+
+    <span class="keyword">unless</span> url.to_s.match(<span class="regexp"><span class="delimiter">/</span><span class="content">^http</span><span class="char">\:</span><span class="char">\/</span><span class="char">\/</span><span class="content">$</span><span class="delimiter">/</span></span>)
+      http.use_ssl     = <span class="predefined-constant">false</span>
+    <span class="keyword">else</span>
+      http.use_ssl     = <span class="predefined-constant">true</span>
+    <span class="keyword">end</span>
+
+    http.verify_mode   = <span class="constant">OpenSSL</span>::<span class="constant">SSL</span>::<span class="constant">VERIFY_NONE</span>
+
+    http.start {|http|
+      request          = <span class="constant">Net</span>::<span class="constant">HTTP</span>::<span class="constant">Get</span>.new(uri.request_uri)
+      <span class="instance-variable">@soi_response</span>    = http.request(request)
+    }
+
+  <span class="keyword">rescue</span> =&gt; e
+    <span class="instance-variable">@logger</span>.error e.message
+    system(<span class="string"><span class="delimiter">&quot;</span><span class="content">echo '</span><span class="inline"><span class="inline-delimiter">#{</span>e.message<span class="inline-delimiter">}</span></span><span class="content"> - </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@soi_url</span><span class="inline-delimiter">}</span></span><span class="content">' </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@mail_cmd</span><span class="inline-delimiter">}</span></span><span class="content"> &gt; /dev/null 2&gt;&amp;1</span><span class="delimiter">&quot;</span></span>)
+    e.backtrace.each { |line| 
+      <span class="instance-variable">@logger</span>.error line       
+    }
+    sleep <span class="integer">3</span>
+    <span class="keyword">retry</span> <span class="keyword">if</span> (<span class="instance-variable">@soi_retries</span> -= <span class="integer">1</span>) &gt; <span class="integer">0</span>
+  <span class="keyword">end</span>
+
+<span class="keyword">end</span>
+
+<span class="comment"># nagbot_soi daemon </span>
+nagbot_soi = <span class="constant">Proc</span>.new <span class="keyword">do</span>
+  <span class="keyword">while</span> <span class="predefined-constant">true</span>
+
+    <span class="instance-variable">@spool</span> = open(<span class="instance-variable">@nagios_fifo</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">r+</span><span class="delimiter">&quot;</span></span>)     
+    <span class="instance-variable">@alert</span> = <span class="instance-variable">@spool</span>.gets  
+
+    <span class="keyword">begin</span>
+    <span class="keyword">rescue</span> =&gt; e
+      <span class="instance-variable">@logger</span>.error e.message
+      system(<span class="string"><span class="delimiter">&quot;</span><span class="content">echo '</span><span class="inline"><span class="inline-delimiter">#{</span>e.message<span class="inline-delimiter">}</span></span><span class="content"> - </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@nagios_fifo</span><span class="inline-delimiter">}</span></span><span class="content">' </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@mail_cmd</span><span class="inline-delimiter">}</span></span><span class="content"> &gt; /dev/null 2&gt;&amp;1</span><span class="delimiter">&quot;</span></span>)
+      e.backtrace.each { |line| 
+        <span class="instance-variable">@logger</span>.error line         
+      }
+      exit <span class="integer">1</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">unless</span> ! (<span class="instance-variable">@alert</span>.to_s.match(<span class="regexp"><span class="delimiter">/</span><span class="content">OK|UP|WARN|UNKNOWN|CRIT|DOWN</span><span class="delimiter">/</span></span>)) <span class="comment"># add alert types here</span>
+
+      <span class="comment"># set the sev state,</span>
+      <span class="comment"># the following are the values of severities in SOI:</span>
+      <span class="comment"># Normal   = 0</span>
+      <span class="comment"># Minor    = 1</span>
+      <span class="comment"># Major    = 2</span>
+      <span class="comment"># Critical = 3</span>
+      <span class="comment"># Down     = 4      </span>
+
+      <span class="keyword">if</span> <span class="instance-variable">@alert</span>.to_s.match(<span class="regexp"><span class="delimiter">/</span><span class="content">OK|UP</span><span class="delimiter">/</span></span>) 
+        <span class="instance-variable">@state</span> = <span class="integer">0</span>
+      <span class="keyword">end</span>
+      <span class="keyword">if</span> <span class="instance-variable">@alert</span>.to_s.match(<span class="regexp"><span class="delimiter">/</span><span class="content">WARN|UNKNOWN</span><span class="delimiter">/</span></span>)
+        <span class="instance-variable">@state</span> = <span class="integer">1</span>
+      <span class="keyword">end</span>      
+      <span class="keyword">if</span> <span class="instance-variable">@alert</span>.to_s.match(<span class="regexp"><span class="delimiter">/</span><span class="content">CRIT</span><span class="delimiter">/</span></span>)
+        <span class="instance-variable">@state</span> = <span class="integer">3</span>
+      <span class="keyword">end</span>
+      <span class="keyword">if</span> <span class="instance-variable">@alert</span>.to_s.match(<span class="regexp"><span class="delimiter">/</span><span class="content">DOWN</span><span class="delimiter">/</span></span>)
+        <span class="instance-variable">@state</span> = <span class="integer">4</span>
+      <span class="keyword">end</span>    
+
+      <span class="instance-variable">@data</span>     = <span class="instance-variable">@alert</span>.split(<span class="string"><span class="delimiter">&quot;</span><span class="char">\s</span><span class="delimiter">&quot;</span></span>)                            <span class="comment"># convert entry in fifo to array</span>
+      <span class="instance-variable">@ci</span>       = <span class="instance-variable">@data</span>[<span class="integer">0</span>]                                      <span class="comment"># extract hostname from array</span>
+      <span class="instance-variable">@sitmsg</span>   = <span class="instance-variable">@data</span>[<span class="integer">1</span>..<span class="integer">-1</span>].join(<span class="string"><span class="delimiter">&quot;</span><span class="content">,</span><span class="delimiter">&quot;</span></span>).to_s.gsub(<span class="regexp"><span class="delimiter">/</span><span class="char">\,</span><span class="delimiter">/</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span>)   <span class="comment"># extract alert message from array</span>
+
+      <span class="comment"># alarm id for clearing needs to match the critical alert</span>
+      <span class="keyword">begin</span>
+        a1              = <span class="constant">Time</span>.now.strftime(<span class="string"><span class="delimiter">&quot;</span><span class="content">%d%m%Y</span><span class="delimiter">&quot;</span></span>)
+        a2              = <span class="instance-variable">@alert</span>.split(<span class="string"><span class="delimiter">&quot;</span><span class="char">\s</span><span class="delimiter">&quot;</span></span>).to_s.bytes.to_a.to_s
+        alert_timestamp = <span class="instance-variable">@alert</span>.split(<span class="regexp"><span class="delimiter">/</span><span class="content">check|server</span><span class="char">\-</span><span class="content">NRPE</span><span class="delimiter">/</span></span>)[<span class="integer">1</span>].split(<span class="regexp"><span class="delimiter">/</span><span class="char">\s</span><span class="delimiter">/</span></span>)[<span class="integer">0</span>].bytes.to_a.to_s
+        ci_timestamp    = (a2 + a1).to_i
+        <span class="instance-variable">@alarm</span>          = (ci_timestamp * alert_timestamp.to_i).to_s.chars.map(&amp;<span class="symbol">:to_i</span>)[<span class="integer">0</span>..<span class="integer">4</span>].to_s
+
+        <span class="instance-variable">@soi_post</span> = <span class="constant">URI</span>.encode(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@soi_url</span><span class="inline-delimiter">}</span></span><span class="content">insid=</span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@ci</span><span class="inline-delimiter">}</span></span><span class="content">&amp;sitmsg=</span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@sitmsg</span><span class="inline-delimiter">}</span></span><span class="content">&amp;sev=</span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@state</span><span class="inline-delimiter">}</span></span><span class="content">&amp;alarm=</span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@alarm</span><span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>) <span class="comment"># build the url to post</span>
+      <span class="keyword">rescue</span> =&gt; e
+        <span class="instance-variable">@logger</span>.error e.message
+        e.backtrace.each { |line| <span class="instance-variable">@logger</span>.error line }
+      <span class="keyword">end</span>  
+
+      <span class="instance-variable">@logger</span>.info <span class="string"><span class="delimiter">&quot;</span><span class="content">alert           : </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@alert</span><span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+      <span class="instance-variable">@logger</span>.info <span class="string"><span class="delimiter">&quot;</span><span class="content">severity        : </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@state</span><span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+      <span class="instance-variable">@logger</span>.info <span class="string"><span class="delimiter">&quot;</span><span class="content">timestamp       : </span><span class="inline"><span class="inline-delimiter">#{</span>a1<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+      <span class="instance-variable">@logger</span>.info <span class="string"><span class="delimiter">&quot;</span><span class="content">ci_timestamp    : </span><span class="inline"><span class="inline-delimiter">#{</span>ci_timestamp<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+      <span class="instance-variable">@logger</span>.info <span class="string"><span class="delimiter">&quot;</span><span class="content">alert_timestamp : </span><span class="inline"><span class="inline-delimiter">#{</span>alert_timestamp<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+      <span class="instance-variable">@logger</span>.info <span class="string"><span class="delimiter">&quot;</span><span class="content">alarm           : </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@alarm</span><span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+      <span class="instance-variable">@logger</span>.info <span class="string"><span class="delimiter">&quot;</span><span class="content">posting         : </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@soi_post</span><span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+
+      <span class="comment"># soi post:</span>
+      nagbot_soi_post(<span class="instance-variable">@soi_post</span>)
+      <span class="instance-variable">@logger</span>.info <span class="string"><span class="delimiter">&quot;</span><span class="content">reply           : </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@soi_response</span><span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+
+      <span class="comment"># xmpp post:</span>
+      <span class="instance-variable">@logger</span>.info <span class="string"><span class="delimiter">&quot;</span><span class="content">xmpp            : echo '</span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@alert</span><span class="inline-delimiter">}</span></span><span class="content">' </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@xmpp_cmd</span><span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+      system(<span class="string"><span class="delimiter">&quot;</span><span class="content">echo '</span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@alert</span><span class="inline-delimiter">}</span></span><span class="content">' </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@xmpp_cmd</span><span class="inline-delimiter">}</span></span><span class="content"> &gt; /dev/null 2&gt;&amp;1</span><span class="delimiter">&quot;</span></span>)
+
+    <span class="keyword">else</span>
+      <span class="instance-variable">@logger</span> = <span class="constant">Logger</span>.new(<span class="instance-variable">@log</span>, <span class="instance-variable">@log_size</span>)
+      <span class="instance-variable">@logger</span>.info <span class="string"><span class="delimiter">&quot;</span><span class="content">ignoring: </span><span class="inline"><span class="inline-delimiter">#{</span><span class="instance-variable">@alert</span><span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+
+    <span class="keyword">end</span> <span class="comment"># unless</span>
+
+    sleep <span class="integer">1</span>
+
+    <span class="instance-variable">@spool</span>.close
+
+  <span class="keyword">end</span> <span class="comment"># while</span>
+
+<span class="keyword">end</span> <span class="comment"># Proc</span>
+
+fork { nagbot_soi.call }
+</pre></td>
+</tr></table>
+</div>
+
+<h3 id="rc-script">RC Script</h3>
+
+<pre><code>#!/bin/sh
+# bsd rc-compliant startup script for nagbot_soi ruby daemon
+
+# PROVIDE: nagbot_soi
+# REQUIRE: NETWORK
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf to enable the puppet agent:
+#
+# nagbot_soi_enable="YES"
+
+
+. /etc/rc.subr
+ 
+name="nagbot_soi"
+rcvar=${name}_enable
+ 
+start_cmd="${name}_start"
+stop_cmd="${name}_stop"
+ 
+load_rc_config $name
+
+: ${nagbot_soi_enable="NO"}
+: ${nagbot_soi_rundir="/var/spool/nagios"}
+
+pidfile="${nagbot_soi_rundir}/${name}.pid"
+command="/usr/local/sbin/nagbot_soi.rb"
+command_interpreter="/usr/local/bin/ruby18"
+
+nagbot_soi_start() {
+  if [ ! -f ${pidfile} ]; then
+    echo -n "Starting services: ${name}"
+    ${command_interpreter} ${command}
+    sleep 5
+    pid=`ps aux | grep ${command} | grep -v grep | awk '{print $2}'`
+    echo ${pid} &gt; ${pidfile}
+    echo "."
+   else
+     echo "It appears ${name} is already running. NOT starting!"
+  fi
+}
+ 
+nagbot_soi_stop() {
+  if [ ! -f ${pidfile} ]; then
+    echo "It appears ${name} is not running."
+  else
+    echo -n "Stopping services: ${name}"
+    kill `cat ${pidfile}`
+    rm ${pidfile}
+    echo "."
+  fi
+}
+
+run_rc_command "$1"
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Git Flow Cheat Sheet]]></title>
     <link href="http://www.systemerror.co.za/blog/2015/04/29/gitflow-cheatsheet/"/>
     <updated>2015-04-29T00:17:00+00:00</updated>
     <id>http://www.systemerror.co.za/blog/2015/04/29/gitflow-cheatsheet</id>
     <content type="html"><![CDATA[<blockquote><p></p><footer><strong>excellent cheatsheet from</strong> <cite><a href="http://danielkummer.github.io/git-flow-cheatsheet">danielkummer.github.io/&hellip;</a></cite></footer></blockquote>
+<p>★ ★ ★
+About</p>
 
-<p>About</p>
-
-<p>git-flow are a set of git extensions to provide high-level repository operations for Vincent Driessen’s branching model. more</p>
-
-<p>★ ★ ★</p>
+<p>git-flow are a set of git extensions to provide high-level repository operations for Vincent Driessen’s branching model.</p>
 
 <p>This cheatsheet shows the basic usage and effect of git-flow operations</p>
 
 <p>★ ★ ★
 Basic tips</p>
 
-<pre><code>Git flow provides excellent command line help and output. Read it carefully to see what's happening...
+<pre><code>Git flow provides excellent command line help and output. 
+Read it carefully to see what's happening...
 The OSX/Windows Client Sourcetree is an excellent git gui and provides git-flow support
-Git-flow is a merge based solution. It doesn't rebase feature branches.
+Git-flow is a merge based solution. 
+It doesn't rebase feature branches.
 </code></pre>
 
 <p>★ ★ ★

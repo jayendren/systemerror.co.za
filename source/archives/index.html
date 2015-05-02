@@ -3,9 +3,7 @@ layout: home
 title: Blog Archive
 ---
 
-<header>
-	<h2>Blog Archive</h2>
-</header>
+{% include header.html %}
 <div id="blog-archives">
 {% assign index = true %}
 {% for post in site.posts reverse %}

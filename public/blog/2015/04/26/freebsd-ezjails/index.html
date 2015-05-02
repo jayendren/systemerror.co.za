@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>FreeBSD EZJAILS - RANDOM ramblings</title>
+  <title>FreeBSD EZJAILS - /dev/random</title>
   <meta name="author" content="jayendren">
 
   
@@ -21,7 +21,7 @@ July 26, 2014 update: different configuration for new pkg tool Following scenari
   <link rel="canonical" href="http://www.systemerror.co.za/blog/2015/04/26/freebsd-ezjails">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="" rel="alternate" title="RANDOM ramblings" type="application/atom+xml">
+  <link href="" rel="alternate" title="/dev/random" type="application/atom+xml">
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.useso.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.useso.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -34,12 +34,12 @@ July 26, 2014 update: different configuration for new pkg tool Following scenari
   <div id="sidebar_control"></div>
   <div id="sidebar">
     <div class="logo">
-      systemERROR
+      .krnl
     </div>
     <div class="content hide">
       <section role="navigation">
         <header role="banner"><hgroup>
-  <h1><a href="/">RANDOM ramblings</a></h1>
+  <h1><a href="/">/dev/random</a></h1>
   
 </hgroup>
 
@@ -54,7 +54,7 @@ July 26, 2014 update: different configuration for new pkg tool Following scenari
 
 <ul class="main-navigation">
   <li><a href="/">home</a></li>
-  <li><a href="/blog/archives">archives</a></li>
+  <li><a href="//wg.dotkrnl.com/p/public">public</a></li>
 </ul>
 
 
@@ -65,23 +65,23 @@ July 26, 2014 update: different configuration for new pkg tool Following scenari
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/05/02/mortal-kombat-x-fatal-8-esports-tournament/">Mortal Kombat X Fatal 8 Tourney</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/30/installing-gitlab-freebsd-10/">Installing Gitlab on FreeBSD 10</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/29/Docker-containers-with-systemd/">Running Docker Containers as Systemd Services</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/29/nagios-soi-xmpp-integration/">Nagios XMPP + SOI Integration</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/04/29/gitflow-cheatsheet/">Git Flow Cheat Sheet</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/04/28/DHCP-relay-for-EX-series/">How to Configure and Verify the DHCP Relay for EX-series Switches</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/04/28/the-anything-store/">The Anything Store</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/04/27/freebsd-nginx_passenger/">FreeBSD Nginx+passenger</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/04/26/freebsd-ezjails/">FreeBSD EZJAILS</a>
       </li>
     
   </ul>
@@ -97,7 +97,16 @@ July 26, 2014 update: different configuration for new pkg tool Following scenari
 </section>
 
 
-
+<section class="twitterOct">
+  <h1 style="margin-bottom: 0.4em"> Tweets </h1>
+  <a class="twitter-timeline"
+	 data-dnt="true" href="https://twitter.com/jayendren" 
+     data-widget-id="593473368122400768">
+     
+     Tweets by @jayendren
+  </a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</section>
 
 
       
@@ -413,7 +422,7 @@ happycamper.local is my domain, I&#8217;ll use the name happycamper for a flavor
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/general/'>general</a>
+    <a class='category' href='/blog/categories/ezjails/'>ezjails</a>, <a class='category' href='/blog/categories/freebsd/'>freebsd</a>
   
 </span>
 
@@ -458,6 +467,11 @@ happycamper.local is my domain, I&#8217;ll use the name happycamper for a flavor
 
 </article>
 
+  <section>
+    <div class="hide" id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
 
     </div>
     <footer role="contentinfo"><div class="content">
@@ -466,16 +480,32 @@ happycamper.local is my domain, I&#8217;ll use the name happycamper for a flavor
   </p>
 </div>
 
-<center>
-  <b> powered by: </b>
-  <img src="http://www.hardkernel.com/main/html/img/common/logo.png" alt="Odroid" style="width:80px;height:80">
-  <img src="https://d11xdyzr0div58.cloudfront.net/static/archnavbar/archlogo.4fefb38dc270.png" alt="ArchLinux" style="width:80px;height:80">
-  <img src="http://nginx.org/nginx.png" alt="NGINX" style="width:80px;height:80">
-  <img src="http://octopress.org/images/logo.png?1420306322" alt="Octopress" style="width:80px;height:80">
-  <img src="https://d3oypxn00j2a10.cloudfront.net/0.17.3/images/pages/brand_guidelines/small_v-dark.png" alt="Docker" style="width:80px;height:80">
-</center>
 </footer>
     
+
+<script type="text/javascript">
+  disqus_shortname = 'wwwsystemerrorcoza';
+  
+    disqus_identifier = 'http://www.systemerror.co.za/blog/2015/04/26/freebsd-ezjails/';
+    disqus_url = 'http://www.systemerror.co.za/blog/2015/04/26/freebsd-ezjails/';
+    function loadDisqus() {
+      
+      // var disqus_developer = 1;
+      var disqus_script = 'embed.js';
+      (function () {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }());
+    }
+  
+  (function () {
+    var disqus_script = 'count.js';
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }());
+</script>
 
 
 

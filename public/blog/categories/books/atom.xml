@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Books | RANDOM ramblings]]></title>
+  <title><![CDATA[Category: Books | /dev/random]]></title>
   <link href="http://www.systemerror.co.za/blog/categories/books/atom.xml" rel="self"/>
   <link href="http://www.systemerror.co.za/"/>
-  <updated>2015-04-28T22:19:58+00:00</updated>
+  <updated>2015-05-02T13:05:58+00:00</updated>
   <id>http://www.systemerror.co.za/</id>
   <author>
     <name><![CDATA[jayendren]]></name>
