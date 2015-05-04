@@ -8,6 +8,7 @@ categories: octopress
 {% img center http://ethanschoonover.com/solarized/img/solarized-yinyang.png %}
 
 {% blockquote from, https://gist.github.com/iq9/2906599 %}
+{% endblockquote %}
 
     sass/custom/_styles.scss
 
