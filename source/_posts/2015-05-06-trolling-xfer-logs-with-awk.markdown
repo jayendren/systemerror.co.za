@@ -5,7 +5,7 @@ date: 2015-05-06 11:11
 comments: true
 categories: awk
 ---
-{% img center http://ethanschoonover.com/solarized/img/solarized-yinyang.png %}
+{% img center http://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/256/Mimetypes-application-x-awk-icon.png %}
 
 
     #!/usr/bin/env bash
