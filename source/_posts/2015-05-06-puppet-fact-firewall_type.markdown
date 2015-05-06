@@ -5,7 +5,7 @@ date: 2015-05-06 11:35
 comments: true
 categories: puppet facter
 ---
-{% img center https://pbs.twimg.com/profile_images/3672925108/954f7381089ac290b4690c5ffd9dd7d3_400x400.png %}
+{% img center https://puppetlabs.com/wp-content/uploads/2010/12/PL_logo_vertical_RGB_sm.png %}
 
 ~~~ ruby 
 # Fact: firewall_type
