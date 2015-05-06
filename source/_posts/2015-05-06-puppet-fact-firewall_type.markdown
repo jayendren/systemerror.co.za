@@ -22,7 +22,6 @@ categories: puppet facter
 # 
 # Notes:
 #   None
-
 Facter.add(:firewall_type) do
   if Facter.value(:operatingsystem).match("FreeBSD")  
       setcode do
