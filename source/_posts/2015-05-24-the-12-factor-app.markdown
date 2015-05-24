@@ -5,7 +5,7 @@ date: 2015-05-24 21:11
 comments: true
 categories: general
 ---
-{% img center http://12factor.net/images/symbol.png %}
+{% img center http://www.epanorama.net/newepa/wp-content/uploads/2014/11/12factor.gif %}
 {% blockquote from, http://12factor.net/ %}
 {% endblockquote %}
 
