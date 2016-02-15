@@ -29,7 +29,7 @@ categories: docker arm
 
 # Preface
 
-In this post we are going to image a armv{6,7} SOC and install golang + docker + fleet + etcd. 
+In this post we are going to install ARCH Linux on a armv{6,7} SOC and install golang + docker + fleet + etcd. 
 
 As most of these tools is made for 64bit systems we will have to modify them a bit. 
 
