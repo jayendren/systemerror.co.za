@@ -29,7 +29,7 @@ categories: general
 
 # Preface
 
-This 3rd article is going to cover post-installation process, where we’ll install golang + docker +fleet + etcd. 
+In this post we are going to image a armv{6,7} SOC and install golang + docker + fleet + etcd. 
 
 As most of these tools is made for 64bit systems we will have to modify them a bit. 
 
