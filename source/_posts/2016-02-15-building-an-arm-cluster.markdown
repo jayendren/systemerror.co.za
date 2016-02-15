@@ -12,19 +12,19 @@ categories: docker arm
 
 # Building ARM cluster: Docker, fleet, etcd...Distribute containers!
 
-1. Preface
-2. ARCH Linux install 
-2.1 ODROID C1 + [armv7] - TODO
-2.2 RPI2 [armv7] - TODO
-2.3 RPI [armv6]
-3. systemd files
-4. Install go, docker, fleet, etcd, cloudinit
-5. Build Docker images
-5.1 ODROID C1 + [armv7] - TODO
-5.2 RPI2 [armv7] - TODO
-5.3 RPI [armv6]
-6. Run NGINX container with fleet
-7. Demo
+* Preface
+* ARCH Linux install 
+	* ODROID C1 + [armv7] - TODO
+	* RPI2 [armv7] - TODO
+	* RPI [armv6]
+* systemd files
+* Install go, docker, fleet, etcd, cloudinit
+* Build Docker images
+	* ODROID C1 + [armv7] - TODO
+	* RPI2 [armv7] - TODO
+	* RPI [armv6]
+* Run NGINX container with fleet
+* Demo
 
 
 # Preface
