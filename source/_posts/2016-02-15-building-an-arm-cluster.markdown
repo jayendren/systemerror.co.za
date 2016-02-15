@@ -420,7 +420,7 @@ mount -t auto -o loop,offset=xxxx /path/to/image.img /mnt
 * import armv6 raspbian_wheezy image into docker
 
 ```
-tar -C /mnt -c . | docker import - armv6/ubuntu 
+tar -C /mnt -c . | docker import - armv6/raspbian_wheezy
 ```
 
 # How to build nginx container?
@@ -428,7 +428,7 @@ tar -C /mnt -c . | docker import - armv6/ubuntu
 * Dockerfile
 
 ``` 
-FROM armv6/ubuntu
+FROM armv6/raspbian_wheezy
 
 MAINTAINER jayendren <jayendren@gmail.com>
 
