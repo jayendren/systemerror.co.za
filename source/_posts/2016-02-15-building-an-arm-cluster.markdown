@@ -210,7 +210,7 @@ public_ip="$private_ipv4"
 
 ``` 
 pacman -Syu && reboot
-pacman -Sy tmux zsh git tree vnstat mlocate axel && updatedb
+pacman -Sy tmux zsh git tree vnstat mlocate axel 7z && updatedb
 ```  
 
 # Install go, docker, fleet, etcd, cloudinit
