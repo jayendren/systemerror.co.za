@@ -54,6 +54,15 @@ curl -o http://downloads.sourceforge.net/project/archlinuxrpi/ArchLinuxARM-rpi-l
 unzip ArchLinuxARM-rpi-latest.zip
 ``` 
 
+* Transfer image to sd card, replace rdiskX with the correct disk that represents your sd card using mount or df
+
+```
+# unmount sdcard
+umount /dev/disk3
+# transfer image to sdcard
+sudo dd if=ArchLinuxARM-rpi-latest.img of=/dev/rdisk3 bs=1m conv=sync
+``` 
+
 * Obtain partition information for resize
 
 ``` 
