@@ -63,7 +63,7 @@ umount /dev/disk3
 sudo dd if=ArchLinuxARM-rpi-latest.img of=/dev/rdisk3 bs=1m conv=sync
 ``` 
 
-* Obtain partition information for resize
+* Boot into OS and resize partition
 
 ``` 
 fdisk /dev/mmcblk0
@@ -108,7 +108,7 @@ w
 reboot
 ``` 
 
-* Resize sd card
+* Resize
 
 ``` 
 resize2fs /dev/mmcblk0p2
