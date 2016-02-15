@@ -10,32 +10,52 @@ categories: general
 {% endblockquote %}
 
 
-# Building ARM cluster: ODROID, Docker, fleet, etcd. Distribute containers!
+# Building ARM cluster: Docker, fleet, etcd. Distribute containers!
 
 0. Preface
-1. ARCH Linux install on ODROID C1 + - TODO
-2. ODROID C1 + systemd files
+1. ARCH Linux install 
+1.1 ODROID C1 + [armv7] - TODO
+1.2 RPI2 [armv7] - TODO
+1.3 RPI [armv6]
+2. systemd files
 3. Install go, docker, fleet, etcd, cloudinit
-4. Build UBUNTU images - TODO
-5. Run nginx container with fleet
+4. Build Docker images
+4.1 ODROID C1 + [armv7] - TODO
+4.2 RPI2 [armv7] - TODO
+4.3 RPI [armv6]
+5. Run NGINX container with fleet
 6. Demo
 
 
 # Preface
 
-This 3rd article is going to cover post-installation process, where we’ll install golang + docker +fleet + etcd. As most of these tools is made for 64bit systems we will have to modify them a bit. The set of tools is used in coreos for managing containers in a cluster, so that is a perfect tool for us!
+This 3rd article is going to cover post-installation process, where we’ll install golang + docker +fleet + etcd. 
 
-# ARCH Linux install on ODROID C1 + - TODO 
+As most of these tools is made for 64bit systems we will have to modify them a bit. 
 
-### Download image
+The set of tools is used in coreos for managing containers in a cluster, so that is a perfect tool for us!
+
+# ARCH Linux install
+
+## ODROID C1 + [armv7] - TODO
+## RPI2 [armv7] - TODO
+
+## RPI [armv6]
+
+*  Download image
+
 ``` 
 curl -o http://downloads.sourceforge.net/project/archlinuxrpi/ArchLinuxARM-rpi-latest.zip\?r\=https%3A%2F%2Fsourceforge.net%2Fprojects%2Farchlinuxrpi%2F%3Fsource%3Ddirectory\&ts\=1455514931\&use_mirror\=tenet
 ``` 
-### Extract image
+
+* Extract image
+
 ``` 
 unzip ArchLinuxARM-rpi-latest.zip
 ``` 
-### Obtain partition information for resize
+
+* Obtain partition information for resize
+
 ``` 
 fdisk /dev/mmcblk0
 Welcome to fdisk (util-linux 2.27.1).
@@ -72,15 +92,21 @@ Last sector, +sectors or +size{K,M,G,T,P} (206847-15523839, default 15523839):
 Created a new partition 2 of type 'Linux' and of size 7.3 GiB.
 w
 ``` 
-### Reboot
+
+* Reboot
+
 ``` 
 reboot
 ``` 
-### Resize sd card
+
+* Resize sd card
+
 ``` 
 resize2fs /dev/mmcblk0p2
 ``` 
-### Verify disk size
+
+* Verify disk size
+
 ``` 
 fdisk -lu /dev/mmcblk0
 Disk /dev/mmcblk0: 7.4 GiB, 7948206080 bytes, 15523840 sectors
@@ -95,7 +121,7 @@ Device         Boot  Start      End  Sectors  Size Id Type
 /dev/mmcblk0p2      206848 15523839 15316992  7.3G 83 Linux
 ```
 
-# ODROID C1 + systemd files
+# systemd files
 
 
 * /lib/systemd/system/fleetd.service
@@ -269,7 +295,9 @@ Name: soul-edge.systemerror.co.za
 ID: 2BN2:KADT:ELMP:7WH7:HWFK:PMYL:W4O6:BYFG:UCRT:6LPQ:43EL:SRM7
 
 ```
-* Or by hand [RHEL clones]:
+
+* docker install by hand [RHEL clones]:
+
 
 ``` 
 echo "[Step] Install Docker"
@@ -359,20 +387,39 @@ sed -i "s/\$private_ipv4/$3/g" /etc/fleet/fleet.conf
 sed -i "s/\$host/$2/g" /usr/src/cluster/cloud-init/odroid.conf
 ```  
 
-# Build images - TODO
+# Build Docker images
+### ODROID C1 + [armv7] - TODO
+### RPI2 [armv7] - TODO
 
-* Get arm rootfs and import into docker
+### RPI [armv6]
+
+* download armv6 raspbian_wheezy image
 
 ```
-# download
 axel -a http://files2.linuxsystems.it/raspbian_wheezy_20140726.img.7z
-# extract
+```
+
+* extract armv6 raspbian_wheezy image
+
+```
 7z x raspbian_wheezy_20140726.img.7z
-# get partition info
+```
+
+* obtain armv6 raspbian_wheezy image partition info
+
+```
 fdisk -lu raspbian_wheezy_20140726.img 
-# partition mounting is offset = sectors x 512
+```
+
+* partition mounting is offset = sectors x 512
+
+```
 mount -t auto -o loop,offset=xxxx /path/to/image.img /mnt
-# import image into docker
+```
+
+* import armv6 raspbian_wheezy image into docker
+
+```
 tar -C /mnt -c . | docker import - armv6/ubuntu 
 ```
 
@@ -395,10 +442,7 @@ RUN \
   apt-get install -y nginx && \
   rm -rf /var/lib/apt/lists/* && \
   echo "\ndaemon off;" >> /etc/nginx/nginx.conf && \
-  rm -f /etc/nginx/sites-enabled/default && \
   chown -R www-data:www-data /var/lib/nginx
-
-#ADD src/nginx.conf /etc/nginx/nginx.conf
 
 # POST INSTALL
 RUN cp /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime
@@ -419,13 +463,13 @@ WORKDIR /etc/nginx
 ENTRYPOINT ["nginx"]
 ```  
 
-* Build container:
+* Build container
 
 ```
 docker build -t armv6/nginx .
 ```
 
-* Run container:
+* Run container
 
 ``` 
 docker run -d \
