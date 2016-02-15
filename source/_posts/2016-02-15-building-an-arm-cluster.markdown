@@ -516,4 +516,4 @@ It works! Now you have fully managed cluster!
 
 # Demo
 
-{% youtube HNNLyqlJbA4 640 480 %}
+{% youtube HNNLyqlJbA4 800 600 %}
