@@ -206,7 +206,7 @@ etcd_request_timeout=30.0
 public_ip="$private_ipv4"
 ``` 
 
-* System update and install tools:
+* System update and install tools
 
 ``` 
 pacman -Syu && reboot
@@ -232,7 +232,7 @@ export GOPATH =/usr/src/spouse
 mkdir /usr/src/spouse
 ``` 
 
-* docker:
+* docker
 
 ```
 pacman -Sy docker
@@ -305,7 +305,7 @@ ID: 2BN2:KADT:ELMP:7WH7:HWFK:PMYL:W4O6:BYFG:UCRT:6LPQ:43EL:SRM7
 
 ```
 
-* docker install by hand [RHEL clones]:
+* docker install by hand [RHEL clones]
 
 
 ``` 
@@ -347,7 +347,7 @@ systemctl enable docker.service
 systemctl enable docker.socket
 ```  
 
-* fleet:
+* fleet
 
 ``` 
 echo "[Step] Install fleet"
@@ -361,7 +361,7 @@ ln -s /usr/src/fleet/bin/* /usr/bin/
 source ~ /.bashrc
 ```  
 
-* etcd with patches:
+* etcd with patches
 
 ``` 
 echo "[Step] Install etcd"
