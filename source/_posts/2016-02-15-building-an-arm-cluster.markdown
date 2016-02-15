@@ -1,9 +1,9 @@
 ---
 layout: post
 title: "Building an ARM Cluster"
-date: 2016-02-15 20:11
+date: 2016-02-15 22:11
 comments: true
-categories: general
+categories: docker arm
 ---
 {% img center http://mkaczanowski.com/wp-content/uploads/2015/03/docker.png %}
 {% blockquote references: http://mkaczanowski.com/building-arm-cluster-part-3-docker-fleet-etcd-distribute-containers/ %}
