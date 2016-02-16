@@ -103,10 +103,11 @@ Created a new partition 2 of type 'Linux' and of size 7.3 GiB.
 w
 ``` 
 
-* Reboot
+* Reboot or Partprobe
 
 ``` 
-reboot
+reboot # reboot
+partprob /dev/mmcblk0 # without reboot
 ``` 
 
 * Resize
@@ -159,7 +160,25 @@ Wants=network.target network-online.target
 After=network.target network-online.target cloudinit.service
 
 [Service]
-ExecStart=/usr/bin/DCE
+#ExecStart=/usr/bin/etcd
+# uncomment depending on node type
+# node01
+ExecStart=/usr/bin/etcd \
+-name odroid01 \
+-peer-addr 192.168.2.80:7001 \
+-addr 192.168.2.81:4001 \
+-initial-cluster-token \
+etcd-cluster-odroid \
+odroid01=http://192.168.2.80:7001, http://192.168.2.81:7001
+# node02
+ExecStart=/usr/bin/etcd \
+-name odroid02 \
+-peer-addr 192.168.2.81:7001 \
+-addr 192.168.2.81:4001  \
+-initial-cluster-token \
+etcd-cluster-odroid \
+odroid02=http://192.168.2.80:7001, http://192.168.2.81:7001
+
 Restart=always
 RestartSec=10s
 
