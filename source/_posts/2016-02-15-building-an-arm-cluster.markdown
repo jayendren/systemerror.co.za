@@ -35,6 +35,9 @@ As most of these tools is made for 64bit systems we will have to modify them a b
 
 The set of tools is used in coreos for managing containers in a cluster, so that is a perfect tool for us!
 
+In this tutorial, we will use 2 SoC's:
+infa01 - 192.168.2.80/24 and infra02 - 192.168.2.81/24
+
 # ARCH Linux install
 
 ## ODROID C1 + [armv7] - TODO
@@ -160,25 +163,7 @@ Wants=network.target network-online.target
 After=network.target network-online.target cloudinit.service
 
 [Service]
-#ExecStart=/usr/bin/etcd
-# uncomment depending on node type
-# node01
-ExecStart=/usr/bin/etcd \
--name odroid01 \
--peer-addr 192.168.2.80:7001 \
--addr 192.168.2.81:4001 \
--initial-cluster-token \
-etcd-cluster-odroid \
-odroid01=http://192.168.2.80:7001, http://192.168.2.81:7001
-# node02
-ExecStart=/usr/bin/etcd \
--name odroid02 \
--peer-addr 192.168.2.81:7001 \
--addr 192.168.2.81:4001  \
--initial-cluster-token \
-etcd-cluster-odroid \
-odroid02=http://192.168.2.80:7001, http://192.168.2.81:7001
-
+ExecStart=/usr/bin/etcd
 Restart=always
 RestartSec=10s
 
@@ -200,30 +185,66 @@ ExecStart=/usr/bin/coreos-cloudinit --from-file /usr/src/cluster/cloud-init-odro
 WantedBy=multi-user.target
 ```  
 
-*  /usr/src/cluster/cloud-init-odroid.conf
+*  /usr/src/cluster/cloud-init-odroid.conf [node01]
 
 ``` 
 #cloud-config
 
 coreos:
   etcd:
-    name: $host
-    data_dir: /var/lib/etcd/
-    discovery: https://discovery.etcd.io/$TOKEN # TOKEN=`curl https://discovery.etcd.io/new` 
-    addr: $private_ipv4:4001
-    peer-addr: $private_ipv4:7001
+    data_dir: /var/lib/etcd
+    name: infra0
+    initial-advertise-peer-urls: http://192.168.2.80:2380
+    listen-peer-urls: http://192.168.2.80:2380
+    listen-client-urls: http://192.168.2.80:2379
+    advertise-client-urls: http://192.168.2.80:2379
+    initial-cluster-token: etcd-cluster-arm
+    initial-cluster: infra0=http://192.168.2.80:2380,infra1=http://192.168.2.81:2380
+    initial-cluster-state: new
   fleet:
-    public-ip: $private_ipv4   # used for fleetctl ssh command
+    public-ip: 192.168.2.80   # used for fleetctl ssh command
+    metadata: node=soul-reaper.systemerror.co.za,env=lab,region=za/rb,cpu=4,arch=armv7,mem=1024MB
  
 ``` 
 
-* /etc/fleet.conf
+*  /usr/src/cluster/cloud-init-odroid.conf [node02]
 
 ``` 
-verbosity = 2
-etcd_servers=["http://$private_ipv4:4001"]
+#cloud-config
+
+coreos:
+  etcd:
+    data_dir: /var/lib/etcd
+    name: infra1
+    initial-advertise-peer-urls: http://192.168.2.81:2380
+    listen-peer-urls: http://192.168.2.81:2380
+    listen-client-urls: http://192.168.2.81:2379
+    advertise-client-urls: http://192.168.2.81:2379
+    initial-cluster-token: etcd-cluster-arm
+    initial-cluster: infra0=http://192.168.2.80:2380,infra1=http://192.168.2.81:2380
+    initial-cluster-state: new
+
+  fleet:
+    public-ip: 192.168.2.81   # used for fleetctl ssh command
+    metadata: node=soul-edge.systemerror.co.za,env=lab,region=za/rb,cpu=1,arch=armv6,mem=256MB
+``` 
+
+* /etc/fleet.conf [node01]
+
+``` 
+verbosity = 0
+etcd_servers=["http://192.168.2.81:2379, http://192.168.2.80:2379"]
 etcd_request_timeout=30.0
-public_ip="$private_ipv4"
+public_ip="192.168.2.81"
+``` 
+
+* /etc/fleet.conf [node02]
+
+``` 
+verbosity = 0
+etcd_servers=["http://192.168.2.81:2379, http://192.168.2.80:2379"]
+etcd_request_timeout=30.0
+public_ip="192.168.2.80"
 ``` 
 
 * System update and install tools
@@ -502,7 +523,7 @@ ENTRYPOINT ["nginx"]
 * Build container
 
 ```
-docker build -t armv6/nginx .
+docker build -t nginx .
 ```
 
 * Run container
@@ -515,7 +536,7 @@ armv6/nginx
 
 docker ps
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                                      NAMES
-0504c017f2bc        armv6/nginx         "nginx"             10 seconds ago      Up 3 seconds        0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp   pedantic_kowalevski
+0504c017f2bc        nginx         "nginx"             10 seconds ago      Up 3 seconds        0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp   pedantic_kowalevski
 
 ```  
 
@@ -534,7 +555,7 @@ Requires=docker.service
 TimeoutStartSec=0
 ExecStartPre=-/bin/docker kill nginx
 ExecStartPre=-/bin/docker rm nginx
-ExecStartPre=/bin/docker pull armv6/nginx
+ExecStartPre=/bin/docker pull nginx
 ExecStart=/bin/docker run --name nginx \
 -p 80:80 \
 -p 443:443 \
@@ -545,8 +566,8 @@ ExecStop=/bin/docker stop nginx
 * Now using fleet we may execute container:
 
 ``` 
-fleetctl --endpoint=http://192.168.4.100:4001 submit nginx
-fleetctl --endpoint=http://192.168.4.100:4001 start nginx
+fleetctl --endpoint=http://192.168.2.80:2379 submit nginx
+fleetctl --endpoint=http://192.168.2.80:2379 start nginx
 ``` 
 It works! Now you have fully managed cluster!
 
