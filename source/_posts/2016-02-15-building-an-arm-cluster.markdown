@@ -233,9 +233,9 @@ coreos:
 
 ``` 
 verbosity = 0
-etcd_servers=["http://192.168.2.81:2379, http://192.168.2.80:2379"]
+etcd_servers=["http://192.168.2.80:2379, http://192.168.2.81:2379"]
 etcd_request_timeout=30.0
-public_ip="192.168.2.81"
+public_ip="192.168.2.80"
 ``` 
 
 * /etc/fleet.conf [node02]
@@ -244,7 +244,7 @@ public_ip="192.168.2.81"
 verbosity = 0
 etcd_servers=["http://192.168.2.81:2379, http://192.168.2.80:2379"]
 etcd_request_timeout=30.0
-public_ip="192.168.2.80"
+public_ip="192.168.2.81"
 ``` 
 
 * System update and install tools
@@ -301,92 +301,7 @@ Server:
  Git commit:   9e83765
  Built:        Thu Feb 11 22:25:21 2016
  OS/Arch:      linux/arm
-
-docker info
-Containers: 9
- Running: 0
- Paused: 0
- Stopped: 9
-Images: 12
-Server Version: 1.10.1
-Storage Driver: devicemapper
- Pool Name: docker-179:2-137390-pool
- Pool Blocksize: 65.54 kB
- Base Device Size: 10.74 GB
- Backing Filesystem: xfs
- Data file: /dev/loop0
- Metadata file: /dev/loop1
- Data Space Used: 3.885 GB
- Data Space Total: 107.4 GB
- Data Space Available: 1.777 GB
- Metadata Space Used: 3.645 MB
- Metadata Space Total: 2.147 GB
- Metadata Space Available: 1.777 GB
- Udev Sync Supported: true
- Deferred Removal Enabled: false
- Deferred Deletion Enabled: false
- Deferred Deleted Device Count: 0
- Data loop file: /var/lib/docker/devicemapper/devicemapper/data
- WARNING: Usage of loopback devices is strongly discouraged for production use. Either use `--storage-opt dm.thinpooldev` or use `--storage-opt dm.no_warn_on_loop_devices=true` to suppress this warning.
- Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
- Library Version: 1.02.115 (2016-01-25)
-Execution Driver: native-0.2
-Logging Driver: json-file
-Plugins:
- Volume: local
- Network: bridge null host
-Kernel Version: 4.1.17-3-ARCH
-Operating System: Arch Linux ARM
-OSType: linux
-Architecture: armv6l
-CPUs: 1
-Total Memory: 226.4 MiB
-Name: soul-edge.systemerror.co.za
-ID: 2BN2:KADT:ELMP:7WH7:HWFK:PMYL:W4O6:BYFG:UCRT:6LPQ:43EL:SRM7
-
 ```
-
-* docker install by hand [RHEL clones]
-
-
-``` 
-echo "[Step] Install Docker"
-mkdir /usr/src/docker-install
-cd /usr/src/docker-install
-yum install -y rpm-build glibc-static
-rpmbuild --rebuild http://copr-be.cloud.fedoraproject.org/results/gipawu/kernel-aufs/fedora-21-x86_64/aufs-util-3.9-1.fc20/aufs-util-3.9-1.fc21.src.rpm
-rpm -i /usr/src/docker-install/rpmbuild/RPMS/armv7hl/aufs-util-3.9-1.fc21.armv7hl.rpm
-yum install -y bridge-utils device-mapper device-mapper-libs libsqlite3x docker-registry docker-storage-setup
-mkdir /usr/src/docker
-cd /usr/src/docker
-wget https://kojipkgs.fedoraproject.org//packages/docker-io/1.5.0/18.git92e632c.fc23/src/docker-io-1.5.0-18.git92e632c.fc23.src.rpm
-rpm2cpio docker-io-1.5.0-18.git92e632c.fc23.src.rpm | cpio -idmv
-tar -xzf docker-92e632c.tar.gz
-curl -L https://github.com/umiddelb/armhf/raw/master/bin/docker-1.5.0> docker
-### INSTALL
-install -p -m 755 docker / usr / bin / docker
-# install bash completion
-install -p -m 644 docker-92e632c84e7b1abc1a2c5cb3a22e0725951a82af/contrib/completion/bash/docker /usr/share/bash-completion/completions
-# install container logrotate cron script
-install -p -m 755 docker-logrotate.sh /etc/cron.daily/docker-logrotate
-# install vim syntax highlighting
-install -p -m 644 docker-92e632c84e7b1abc1a2c5cb3a22e0725951a82af/contrib/syntax/vim/doc/dockerfile.txt /usr/share/vim/vimfiles/doc
-install -p -m 644 docker-92e632c84e7b1abc1a2c5cb3a22e0725951a82af/contrib/syntax/vim/ftdetect/dockerfile.vim /usr/share/vim/vimfiles/ftdetect
-install -p -m 644 docker-92e632c84e7b1abc1a2c5cb3a22e0725951a82af/contrib/syntax/vim/syntax/dockerfile.vim /usr/share/vim/vimfiles/syntax
-# install udev rules
-install -p docker-92e632c84e7b1abc1a2c5cb3a22e0725951a82af/contrib/udev/80-docker.rules /etc/udev/rules.d
-# install systemd / init scripts
-install -p -m 644 docker.service /usr/lib/systemd/system
-# for additional args
-install -p -m 644 docker.sysconfig / etc / sysconfig / docker
-install -p -m 644-docker network.sysconfig / etc / sysconfig / network-docker
-install -p -m 644-docker storage.sysconfig / etc / sysconfig / docker-storage
-# install docker config directory
-sudo install -dp /etc/docker
-getent passwd dockerroot > /dev/null || sudo /usr/sbin/useradd -r -d /var/lib/docker -s /sbin/nologin -c "Docker User" dockerroot
-systemctl enable docker.service
-systemctl enable docker.socket
-```  
 
 * fleet
 
