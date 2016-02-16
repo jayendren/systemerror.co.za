@@ -267,7 +267,7 @@ git checkout go1.4.1
 cd src
 ./make.bash
 echo "export PATH=$PATH:/usr/src/go/bin/" >> ~/.bashrc
-echo "export GOPATH=/usr/src/spouse" >> ~ / .bashrc
+echo "export GOPATH=/usr/src/spouse" >> ~/.bashrc
 export PATH=$PATH:/usr/src/go/bin/
 export GOPATH=/usr/src/spouse
 mkdir /usr/src/spouse
@@ -277,14 +277,29 @@ mkdir /usr/src/spouse
 
 ```
 pacman -Sy docker
+```
+
+* docker bootflags
+
+```
 # add to /boot/cmdline.txt - cgroup_enable=memory swapaccount=1
+# e.g:
 
 root=/dev/mmcblk0p2 rw rootwait console=ttyAMA0,115200 console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 kgdboc=ttyAMA0,115200 elevator=noop cgroup_enable=memory swapaccount=1
-reboot
+```
 
+* post install
+
+```
+
+# enable docker
 systemctl enable docker.service
 systemctl enable docker.socket
 
+# reboot
+reboot
+
+# verify docker
 docker version
 Client:
  Version:      1.10.1
@@ -348,13 +363,7 @@ git clone https://github.com/coreos/coreos-cloudinit.git
 cd coreos-cloudinit && git checkout 0a46b32c889732874a6cec918629f9bbd88a9c54
 ./build
 ln -s /usr/src/coreos-cloudinit/bin/coreos-cloudinit /usr/bin/coreos-cloudinit
-echo -n "hostname> "
-read host_name; echo
-echo -n "ipaddress> "
-read ipaddress; echo
-sed -i "s/\$private_ipv4/$ipaddress/g" /usr/src/cluster/cloud-init-odroid.conf
-sed -i "s/\$private_ipv4/$ipaddress/g" /usr/src/cluster/fleet.conf
-sed -i "s/\$host/$host_name/g" /usr/src/cluster/cloud-init-odroid.conf
+coreos-cloudinit --from-file /usr/src/cluster/cloud-init-odroid.conf
 ```  
 
 # Build Docker images
@@ -476,6 +485,8 @@ ExecStart=/bin/docker run --name nginx \
 -p 443:443 \
 armv6/nginx
 ExecStop=/bin/docker stop nginx
+[X-Fleet]
+Global=true # will launch on all nodes
 ```  
 
 * Now using fleet we may execute container:
