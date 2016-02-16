@@ -38,6 +38,7 @@ The set of tools is used in coreos for managing containers in a cluster, so that
 # ARCH Linux install
 
 ## ODROID C1 + [armv7] - TODO
+
 ## RPI2 [armv7] - TODO
 
 ## RPI [armv6]
@@ -210,7 +211,7 @@ public_ip="$private_ipv4"
 
 ``` 
 pacman -Syu && reboot
-pacman -Sy tmux zsh git tree vnstat mlocate axel 7z && updatedb
+pacman -Sy tmux zsh git tree vnstat mlocate axel 7z patchutils && updatedb
 ```  
 
 # Install go, docker, fleet, etcd, cloudinit
@@ -397,7 +398,9 @@ sed -i "s/\$host/$2/g" /usr/src/cluster/cloud-init/odroid.conf
 ```  
 
 # Build Docker images
+
 ### ODROID C1 + [armv7] - TODO
+
 ### RPI2 [armv7] - TODO
 
 ### RPI [armv6]
