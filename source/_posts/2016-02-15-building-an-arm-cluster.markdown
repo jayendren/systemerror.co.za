@@ -159,7 +159,7 @@ Wants=network.target network-online.target
 After=network.target network-online.target cloudinit.service
 
 [Service]
-ExecStart = /usr/bin/DCE
+ExecStart=/usr/bin/DCE
 Restart=always
 RestartSec=10s
 
@@ -175,22 +175,22 @@ Description=cloudinit
 
 [Service]
 Type = oneshot
-ExecStart=/usr/bin/coreos-cloudinit --from-file /root/cluster/cloud-init/odroid.conf
+ExecStart=/usr/bin/coreos-cloudinit --from-file /usr/src/cluster/cloud-init-odroid.conf
 
 [Install]
 WantedBy=multi-user.target
 ```  
 
-*  /root/cluster/cloud-init/odroid.conf/odroid.conf
+*  /usr/src/cluster/cloud-init-odroid.conf
 
 ``` 
-# cloud-config
+#cloud-config
 
-Core:
+coreos:
   etcd:
     name: $host
     data_dir: /var/lib/etcd/
-    discovery: https://discovery.etcd.io/da3221e6c34261892a8c89f1845631b6
+    discovery: https://discovery.etcd.io/$TOKEN # TOKEN=`curl https://discovery.etcd.io/new` 
     addr: $private_ipv4:4001
     peer-addr: $private_ipv4:7001
   fleet:
@@ -211,7 +211,7 @@ public_ip="$private_ipv4"
 
 ``` 
 pacman -Syu && reboot
-pacman -Sy tmux zsh git tree vnstat mlocate axel 7z patch && updatedb
+pacman -Sy tmux zsh git tree vnstat mlocate axel 7z patch gcc && updatedb
 ```  
 
 # Install go, docker, fleet, etcd, cloudinit
@@ -227,9 +227,9 @@ git checkout go1.4.1
 cd src
 ./make.bash
 echo "export PATH=$PATH:/usr/src/go/bin/" >> ~/.bashrc
-echo "export GOPATH = /usr/src/spouse" >> ~ / .bashrc
+echo "export GOPATH=/usr/src/spouse" >> ~ / .bashrc
 export PATH=$PATH:/usr/src/go/bin/
-export GOPATH =/usr/src/spouse
+export GOPATH=/usr/src/spouse
 mkdir /usr/src/spouse
 ``` 
 
@@ -359,6 +359,7 @@ cd fleet
 ./build
 ./test
 ln -s /usr/src/fleet/bin/* /usr/bin/
+systemctl enable fleet.service
 source ~ /.bashrc
 ```  
 
@@ -389,12 +390,16 @@ systemctl enable fleetd
 echo "[Step] Cloud config"
 cd /usr/src/
 git clone https://github.com/coreos/coreos-cloudinit.git
-cd coreos-cloudinit
+cd coreos-cloudinit && git checkout 0a46b32c889732874a6cec918629f9bbd88a9c54
 ./build
 ln -s /usr/src/coreos-cloudinit/bin/coreos-cloudinit /usr/bin/coreos-cloudinit
-sed -i "s/\$private_ipv4/$3/g" /usr/src/cluster/cloud-init/odroid.conf
-sed -i "s/\$private_ipv4/$3/g" /etc/fleet/fleet.conf
-sed -i "s/\$host/$2/g" /usr/src/cluster/cloud-init/odroid.conf
+echo -n "hostname> "
+read host_name; echo
+echo -n "ipaddress> "
+read ipaddress; echo
+sed -i "s/\$private_ipv4/$ipaddress/g" /usr/src/cluster/cloud-init-odroid.conf
+sed -i "s/\$private_ipv4/$ipaddress/g" /usr/src/cluster/fleet.conf
+sed -i "s/\$host/$host_name/g" /usr/src/cluster/cloud-init-odroid.conf
 ```  
 
 # Build Docker images
